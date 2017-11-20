@@ -65,7 +65,7 @@ class Team extends BaseCollection {
 	}
 }
 
-/*class TeamCollection extends BaseCollection {
+class TeamCollection extends BaseCollection {
 	constructor(filter) {
 		super(filter);
 	}
@@ -75,7 +75,7 @@ class Team extends BaseCollection {
 			team_id: {
 				type: 'integer',
 				isPrimaryKey: true
-			}
+			},
 			name: {
 				type: 'string'
 			}
@@ -90,18 +90,8 @@ class Team extends BaseCollection {
 		return Team;
 	}
 }
-*/
+
 let users = new UserCollection();
 let camerons = new UserCollection().filter({ name: 'Cameron' });
 
-console.log(camerons.toSql());
-
 camerons.on('create', u => u.greet());
-
-/*OneToMany.impl(Team, [User], {
-	
-})
-
-ManyToOne.impl(User, [Team], {
-	
-})*/
