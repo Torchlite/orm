@@ -28,10 +28,39 @@ foo = new Filter({
 	archived: {
 		$ne: null
 	},
-	orders: {
-		$in: [1,3,5,11]
+	order: {
+		$in: [1,2,3,4,5]
 	}
 });
 foo.applyToSql(q);
+assert(q.toString() === 'SELECT * FROM clients WHERE (name = TeamCo) AND (customer_count > 5) AND (customer_count < 10) AND (employee_count >= 100) AND (employee_count <= 499) AND (archived != null) AND (order IN (1, 2, 3, 4, 5))', `Complex filters failed, should be ${q.toString()}`);
 
-assert(q.toString() === 'SELECT * FROM clients WHERE (name = TeamCo) AND (customer_count > 5) AND (customer_count < 10) AND (employee_count >= 100) AND (employee_count <= 499) AND (archived != null) AND (orders IN 1,3,5,11)', 'Complex filters failed');
+let trueClient = {
+	name: 'TeamCo',
+	customer_count: 7,
+	employee_count: 230,
+	archived: false,
+	order: 2
+}
+
+let falseOrderClient = {
+	name: 'TeamCo',
+	customer_count: 7,
+	employee_count: 230,
+	archived: false,
+	order: 6
+}
+
+let falseClient = {
+	name: 'OtherCo',
+	customer_count: 7,
+	employee_count: 230,
+	archived: false,
+	order: 4
+}
+
+let fooFun = foo.toJsFilter();
+
+assert(fooFun(trueClient), 'trueClient should pass the filter');
+assert(!fooFun(falseClient), 'falseClient should fail the filter');
+assert(!fooFun(falseOrderClient), 'falseOrderClient should not pass the filter');
