@@ -50,7 +50,7 @@ class UserCollection extends BaseCollection {
 	}
 }
 
-class Team extends BaseCollection {
+class Team {
 	constructor(id, name) {
 		this.id = id;
 		this.name = name;
