@@ -1,7 +1,11 @@
 'use strict';
 let assert = require('assert');
+let { Pool } = require('pg');
+let pool = new Pool({
+	connectionString: 'postgres://localhost:5432/testerino'
+});
 
-let BaseCollection = require('../lib/BaseCollection');
+let BaseCollection = require('../lib/classes/BaseCollection')(pool);
 
 let ManyToOne = require('../lib/associations/ManyToOne');
 let OneToMany = require('../lib/associations/OneToMany');
@@ -92,6 +96,9 @@ class TeamCollection extends BaseCollection {
 }
 
 let users = new UserCollection();
-let camerons = new UserCollection().filter({ name: 'Cameron' });
+let camerons = users.filter({ name: 'Cameron' });
 
-camerons.on('create', u => u.greet());
+assert(users.toSql() === 'SELECT user_id, team_id, name FROM users', 'Simple unfiltered');
+assert(camerons.toSql() === `SELECT user_id, team_id, name FROM users WHERE (name = 'Cameron')`, 'Simple filter');
+
+require('./filter');

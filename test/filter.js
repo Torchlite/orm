@@ -64,3 +64,13 @@ let fooFun = foo.toJsFilter();
 assert(fooFun(trueClient), 'trueClient should pass the filter');
 assert(!fooFun(falseClient), 'falseClient should fail the filter');
 assert(!fooFun(falseOrderClient), 'falseOrderClient should not pass the filter');
+
+let bar = new Filter({
+	name: 'TeamCo',
+	customer_count: {
+		$gt: 10,
+		$lt: 20
+	}
+});
+
+assert(bar.toSql() === `name = 'TeamCo' AND customer_count > 10 AND customer_count < 20`, bar.toSql());
