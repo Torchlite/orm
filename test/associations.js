@@ -1,24 +1,29 @@
-'use strict';
 let assert = require('assert');
 let { Pool } = require('pg');
 let pool = new Pool({
 	connectionString: 'postgres://localhost:5432/testerino'
 });
-
 let BaseCollection = require('../lib/classes/BaseCollection')(pool);
+let BaseModel = require('../lib/classes/BaseModel');
 let Table = require('../lib/classes/Table');
-
-let ManyToOne = require('../lib/associations/ManyToOne');
 let OneToMany = require('../lib/associations/OneToMany');
+let ManyToOne = require('../lib/associations/ManyToOne');
+let ManyToMany = require('../lib/associations/ManyToMany')();
 
-class User {
-	constructor(id, name) {
+class User extends BaseModel {
+	constructor(id, name, teamId) {
+		super();
 		this.id = id;
 		this.name = name;
+		this.teamId = teamId;
 	}
 
 	greet() {
 		console.log(`Hello, ${this.name}`);
+	}
+
+	static get associatedCollection() {
+		return UserCollection;
 	}
 
 	static fromSQLRow(row) {
@@ -51,10 +56,15 @@ class UserCollection extends BaseCollection {
 	}
 }
 
-class Team {
+class Team extends BaseModel {
 	constructor(id, name) {
+		super();
 		this.id = id;
 		this.name = name;
+	}
+
+	static get associatedCollection() {
+		return TeamCollection;
 	}
 
 	cheer() {
@@ -88,6 +98,18 @@ class TeamCollection extends BaseCollection {
 	}
 }
 
+class Game extends BaseModel {
+	constructor(id, date) {
+		super();
+		this.id = id;
+		this.date = date;
+	}
+
+	static get associatedCollection() {
+		return GameCollection;
+	}
+}
+
 class GameCollection extends BaseCollection {
 	constructor(filter) {
 		super(filter);
@@ -99,10 +121,6 @@ class GameCollection extends BaseCollection {
 				type: 'integer',
 				isPrimaryKey: true
 			},
-			team_id: {
-				type: 'integer',
-				isPrimaryKey: true
-			},
 			date: {
 				type: 'date'
 			}
@@ -110,34 +128,48 @@ class GameCollection extends BaseCollection {
 	}
 
 	static get associatedClass() {
-		// who cares
-		return Team;
+		return Game;
 	}
 }
 
-let users = new UserCollection();
-let camerons = users.filter({ name: 'Cameron' });
-
-let teams = new TeamCollection()
-	.filter({ name: 'Buttkickers' });
-
-let games = new GameCollection()
-	.filter({
-		date: {
-			$gt: '2017-01-01'
+ManyToOne.impl(User, [Team], {
+	foreignKey: function() {
+		return {
+			col: 'team_id',
+			val: 'teamId'
 		}
-	});
+	}
+});
+/*OneToMany.impl(Team, [User], {
+	foreignKey: function() {
+		return {
+			col: 'team_id',
+			val: 'id'
+		}
+	}
+});*/
+ManyToMany.impl(Team, [Game], {
+	foreignKey: function() {
+		return {
+			col: 'team_id',
+			val: 'id'
+		}
+	},
 
+	otherKey: function() {
+		return {
+			col: 'game_id'
+		}
+	},
 
-let joined = camerons
-	.join(teams, { fk: 'users.team_id', references: 'teams.team_id' })
-	.join(games, { fk: 'games.team_id', references: 'teams.team_id' });
+	joinTable: function() {
+		return 'team_games';
+	}
+});
 
-assert(users.toSql() === 'SELECT users.user_id, users.team_id, users.name FROM users', 'Simple unfiltered returned ' + users.toSql());
-assert(camerons.toSql() === `SELECT users.user_id, users.team_id, users.name FROM users WHERE (users.name = 'Cameron')`, 'Simple filter returned ' + camerons.toSql());
-assert(joined.toSql() === `SELECT users.user_id, users.team_id, users.name FROM users INNER JOIN teams ON (users.team_id = teams.team_id) INNER JOIN games ON (games.team_id = teams.team_id) WHERE (users.name = 'Cameron' AND teams.name = 'Buttkickers' AND games.date > 2017-01-01)`, 'Joined returned ' + joined.toSql());
+let t =  new Team(2, 'Crushinators');
+let u = new User(1, 'John', 20);
 
-require('./filter');
-require('./associations');
-
-console.log('All tests pass');
+//assert(t.get(User).toSql() === 'SELECT users.user_id, users.team_id, users.name FROM users WHERE (users.team_id = 2)', 'ManyToOne failed');
+assert(u.get(Team).toSql() === 'SELECT teams.team_id, teams.name FROM teams WHERE (teams.team_id = 20)', 'OneToMany failed; generated: ' + u.get(Team).toSql());
+console.log(t.get(Game).toSql());
