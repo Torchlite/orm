@@ -6,6 +6,7 @@ let pool = new Pool({
 });
 
 let BaseCollection = require('../lib/classes/BaseCollection')(pool);
+let Table = require('../lib/classes/Table');
 
 let ManyToOne = require('../lib/associations/ManyToOne');
 let OneToMany = require('../lib/associations/OneToMany');
@@ -26,12 +27,12 @@ class User {
 }
 
 class UserCollection extends BaseCollection {
-	constructor(filter) {
-		super(filter);
+	constructor(filter, joins) {
+		super(filter, joins);
 	}
 
-	static get schema() {
-		return {
+	static get baseTable() {
+		return new Table('users', {
 			user_id: {
 				type: 'integer',
 				isPrimaryKey: true
@@ -42,11 +43,7 @@ class UserCollection extends BaseCollection {
 			name: {
 				type: 'string'
 			}
-		}
-	}
-
-	static get tableName() {
-		return 'users'
+		});
 	}
 
 	static get associatedClass() {
@@ -74,8 +71,8 @@ class TeamCollection extends BaseCollection {
 		super(filter);
 	}
 
-	static get schema() {
-		return {
+	static get baseTable() {
+		return new Table('teams', {
 			team_id: {
 				type: 'integer',
 				isPrimaryKey: true
@@ -83,11 +80,7 @@ class TeamCollection extends BaseCollection {
 			name: {
 				type: 'string'
 			}
-		}
-	}
-
-	static get tableName() {
-		return 'teams'
+		});
 	}
 
 	static get associatedClass() {
@@ -95,10 +88,55 @@ class TeamCollection extends BaseCollection {
 	}
 }
 
+class GameCollection extends BaseCollection {
+	constructor(filter) {
+		super(filter);
+	}
+
+	static get baseTable() {
+		return new Table('games', {
+			game_id: {
+				type: 'integer',
+				isPrimaryKey: true
+			},
+			team_id: {
+				type: 'integer',
+				isPrimaryKey: true
+			},
+			date: {
+				type: 'date'
+			}
+		});
+	}
+
+	static get associatedClass() {
+		// who cares
+		return Team;
+	}
+}
+
 let users = new UserCollection();
 let camerons = users.filter({ name: 'Cameron' });
 
-assert(users.toSql() === 'SELECT user_id, team_id, name FROM users', 'Simple unfiltered');
-assert(camerons.toSql() === `SELECT user_id, team_id, name FROM users WHERE (name = 'Cameron')`, 'Simple filter');
+let teams = new TeamCollection()
+	.filter({ name: 'Buttkickers' });
+
+let games = new GameCollection()
+	.filter({
+		date: {
+			$gt: '2017-01-01'
+		}
+	});
+
+
+let joined = camerons
+	.join(teams, { fk: 'users.team_id', references: 'teams.team_id' })
+	.join(games, { fk: 'games.team_id', references: 'teams.team_id' });
+
+assert(users.toSql() === 'SELECT users.user_id, users.team_id, users.name FROM users', 'Simple unfiltered returned ' + users.toSql());
+assert(camerons.toSql() === `SELECT users.user_id, users.team_id, users.name FROM users WHERE (users.name = 'Cameron')`, 'Simple filter returned ' + camerons.toSql());
+assert(joined.toSql() === `SELECT users.user_id, users.team_id, users.name FROM users INNER JOIN teams ON (users.team_id = teams.team_id) INNER JOIN games ON (games.team_id = teams.team_id) WHERE (users.name = 'Cameron' AND teams.name = 'Buttkickers' AND games.date > 2017-01-01)`, 'Joined returned ' + joined.toSql());
 
 require('./filter');
+
+console.log('All tests pass');
