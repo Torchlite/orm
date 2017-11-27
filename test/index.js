@@ -138,6 +138,5 @@ assert(camerons.toSql() === `SELECT users.user_id, users.team_id, users.name FRO
 assert(joined.toSql() === `SELECT users.user_id, users.team_id, users.name FROM users INNER JOIN teams ON (users.team_id = teams.team_id) INNER JOIN games ON (games.team_id = teams.team_id) WHERE (users.name = 'Cameron' AND teams.name = 'Buttkickers' AND games.date > 2017-01-01)`, 'Joined returned ' + joined.toSql());
 
 require('./filter');
-require('./associations');
 
 console.log('All tests pass');
