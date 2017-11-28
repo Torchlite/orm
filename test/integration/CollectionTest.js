@@ -47,5 +47,11 @@ function findByIdTest() {
 		});
 }
 
-findByIdTest()
-	.then(() => console.log('Tests passed'));
+function test() {
+	return Promise.all([
+		findByIdTest,
+		collectTest
+	]);
+}
+
+module.exports = test;

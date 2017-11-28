@@ -1,4 +1,5 @@
 require('./FilterTest');
 require('./CollectionTest');
 require('./AssociateTest');
-console.log('All tests passed');
+require('./ModelTest');
+console.log('Unit tests passed');

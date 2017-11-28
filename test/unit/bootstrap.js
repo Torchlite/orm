@@ -1,8 +1,8 @@
 'use strict';
 
-let BaseCollection = require('../lib/BaseCollection')();
-let BaseModel = require('../lib/BaseModel');
-let Table = require('../lib/Table');
+let BaseCollection = require('../../lib/BaseCollection')();
+let BaseModel = require('../../lib/BaseModel')();
+let Table = require('../../lib/Table');
 
 let userTable = new Table('users', {
 	user_id: {
@@ -24,6 +24,14 @@ class User extends BaseModel {
 
 	greet() {
 		console.log(`Hello, ${this.name}`);
+	}
+
+	static get fieldMap() {
+		return {
+			id: 'user_id',
+			name: 'name',
+			teamId: 'team_id'
+		}
 	}
 
 	static get table() {
