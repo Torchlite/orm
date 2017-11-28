@@ -1,9 +1,6 @@
 'use strict';
 let assert = require('assert');
 
-let ManyToOne = require('../lib/associations/ManyToOne');
-let OneToMany = require('../lib/associations/OneToMany');
-
 let {
 	User,
 	UserCollection,
@@ -11,7 +8,6 @@ let {
 	TeamCollection,
 	GameCollection
 } = require('./bootstrap');
-
 
 let users = new UserCollection();
 let camerons = users.filter({ name: 'Cameron' });
@@ -36,5 +32,3 @@ let games = new GameCollection()
 assert(users.toSql() === 'SELECT user_id, team_id, name FROM users', 'Simple unfiltered returned ' + users.toSql());
 assert(camerons.toSql() === `SELECT user_id, team_id, name FROM users WHERE (name = 'Cameron')`, 'Simple filter returned ' + camerons.toSql());
 assert(games.toSql() === `SELECT game_id, team_id, date FROM games WHERE (date > 2017-01-01 AND winner = 2 AND valid != false)`, 'Complex filter failed');
-
-console.log('All tests pass');

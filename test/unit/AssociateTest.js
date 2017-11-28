@@ -1,5 +1,5 @@
 'use strict';
-let Associate = require('../lib/Associate')();
+let Associate = require('../../lib/Associate')();
 let assert = require('assert');
 let {
 	User,

@@ -1,7 +1,7 @@
 let assert = require('assert');
 
 let squel = require('squel');
-let Filter = require('../lib/Filter');
+let Filter = require('../../lib/Filter');
 
 let q = squel.select()
 	.from('clients');
