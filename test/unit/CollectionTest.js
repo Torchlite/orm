@@ -18,7 +18,8 @@ let teams = new TeamCollection()
 let games = new GameCollection()
 	.filter({
 		date: {
-			$gt: '2017-01-01'
+			$gt: '2017-01-01',
+			$lt: '2017-01-31'
 		},
 		winner: 2
 	})
@@ -26,9 +27,10 @@ let games = new GameCollection()
 		valid: {
 			$ne: false
 		}
-	});
-
+	})
+	.limit(10)
+	.offset(55);
 
 assert(users.toSql() === 'SELECT user_id, team_id, name FROM users', 'Simple unfiltered returned ' + users.toSql());
 assert(camerons.toSql() === `SELECT user_id, team_id, name FROM users WHERE (name = 'Cameron')`, 'Simple filter returned ' + camerons.toSql());
-assert(games.toSql() === `SELECT game_id, team_id, date FROM games WHERE (date > 2017-01-01 AND winner = 2 AND valid != false)`, 'Complex filter failed');
+assert(games.toSql() === `SELECT game_id, team_id, date FROM games WHERE (date > '2017-01-01' AND date < '2017-01-31' AND winner = 2 AND valid != FALSE) LIMIT 10 OFFSET 55`, 'Complex filter failed');

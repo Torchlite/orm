@@ -44,10 +44,6 @@ class User extends BaseModel {
 }
 
 class UserCollection extends BaseCollection {
-	constructor(filter) {
-		super(filter);
-	}
-
 	static get baseTable() {
 		return new Table('users', {
 			user_id: {
@@ -99,10 +95,6 @@ class Team extends BaseModel {
 }
 
 class TeamCollection extends BaseCollection {
-	constructor(filter) {
-		super(filter);
-	}
-
 	static get baseTable() {
 		return teamTable;
 	}
@@ -113,10 +105,6 @@ class TeamCollection extends BaseCollection {
 }
 
 class GameCollection extends BaseCollection {
-	constructor(filter) {
-		super(filter);
-	}
-
 	static get baseTable() {
 		return new Table('games', {
 			game_id: {
