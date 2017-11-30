@@ -25,7 +25,7 @@ class ORM {
 	}
 
 	get Associate() {
-		return require('./lib/Associate');
+		return require('./lib/Associate')(this.pool);
 	}
 
 	get Table() {
