@@ -1,5 +1,5 @@
 'use strict';
-let ORM = require('../../lib');
+let ORM = require('../../index');
 
 let {
 	BaseCollection,

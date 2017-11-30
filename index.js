@@ -13,23 +13,23 @@ class ORM {
 	};
 
 	get BaseCollection() {
-		return require('./BaseCollection')(this.pool);
+		return require('./lib/BaseCollection')(this.pool);
 	}
 
 	get BaseModel() {
-		return require('./BaseModel');
+		return require('./lib/BaseModel')(this.pool);
 	}
 
 	get Filter() {
-		return require('./Filter');
+		return require('./lib/Filter');
 	}
 
 	get Associate() {
-		return require('./Associate');
+		return require('./lib/Associate');
 	}
 
 	get Table() {
-		return require('./Table');
+		return require('./lib/Table');
 	}
 
 	get squel() {
