@@ -40,7 +40,7 @@ const usage = [
 const args = commandLineArgs(argSchema);
 
 const client = new Client({
-	connectionString: args.db_url;
+	connectionString: args.db_url
 });
 
 const colsQuery = tableName => {

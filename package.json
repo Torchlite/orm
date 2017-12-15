@@ -9,6 +9,8 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
+    "command-line-args": "4.0.7",
+    "command-line-usage": "4.0.2",
     "dotenv": "4.0.0",
     "pg": "7.4.0",
     "protoduck": "4.0.0",
