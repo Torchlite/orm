@@ -9,6 +9,6 @@ let {
 	GameCollection
 } = require('./bootstrap');
 
-let user = new User(null, 'Cameron', 10);
+let user = new User({ id: null, name: 'Cameron', teamId: 10 });
 
 assert(user.saveSql() === `INSERT INTO users (name, team_id) VALUES ('Cameron', 10) ON CONFLICT (user_id) DO UPDATE SET name = 'Cameron', team_id = 10`, 'Save query is wrong');

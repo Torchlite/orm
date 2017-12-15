@@ -9,19 +9,15 @@ let userTable = new Table('users', {
 		type: 'integer',
 		isPrimaryKey: true
 	},
+	team_id: {
+		type: 'integer'
+	},
 	name: {
 		type: 'date'
 	}
 });
 
 class User extends BaseModel {
-	constructor(id, name, teamId) {
-		super();
-		this.id = id;
-		this.name = name;
-		this.teamId = teamId;
-	}
-
 	greet() {
 		console.log(`Hello, ${this.name}`);
 	}
@@ -39,7 +35,7 @@ class User extends BaseModel {
 	}
 
 	static fromSQLRow(row) {
-		return new User(row.user_id, row.name);
+		return new User(row);
 	}
 }
 
@@ -75,12 +71,6 @@ let teamTable = new Table('teams', {
 });
 
 class Team extends BaseModel {
-	constructor(id, name) {
-		super();
-		this.teamId = id;
-		this.name = name;
-	}
-
 	cheer() {
 		console.log(`Go ${this.name}!`);
 	}
@@ -91,6 +81,13 @@ class Team extends BaseModel {
 
 	static fromSQLRow(row) {
 		return new Team(row.team_id, row.name);
+	}
+
+	static get fieldMap() {
+		return {
+			teamId: 'team_id',
+			name: 'name'
+		}
 	}
 }
 
@@ -138,14 +135,12 @@ let gameTable = new Table('games', {
 });
 
 class Game extends BaseModel {
-	constructor(id, date) {
-		super();
-		this.id = id;
-		this.date = date;
+	constructor (obj) {
+		super(obj);
 	}
 
 	fromSQLRow(row) {
-		return new Game(row.game_id, moment(row.date));
+		return new Game(row);
 	}
 
 	static get table() {
@@ -154,6 +149,13 @@ class Game extends BaseModel {
 
 	static get associatedCollection() {
 		return GameCollection;
+	}
+
+	static get fieldMap() {
+		return {
+			gameId: 'game_id',
+			date: 'date'
+		}
 	}
 }
 
