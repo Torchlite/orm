@@ -25,6 +25,9 @@ function collectTest() {
 
 			assert(count === collectCount, 'Counts did not match');
 			assert(u[0].every(m => m.greet), 'Results do not appear to be users');
+		})
+		.then(() => {
+			console.log('\tcollect succeeded');
 		});
 }
 
@@ -43,10 +46,35 @@ function findByIdTest() {
 			assert(u.id === found.id, 'id mismatch');
 			assert(u.name === found.name, 'name mismatch');
 			assert(u.greet() === `Hello, ${u.name}`, 'bad greeting');
+		})
+		.then(() => {
+			console.log('\tfindById succeeded');
+		});
+}
+
+function findOneTest() {
+	let found;
+	return pool.query(`select user_id, name from users limit 1`)
+		.then(r => {
+			found = {
+				id: r.rows[0].user_id,
+				name: r.rows[0].name
+			};
+
+			return users.findOne();
+		})
+		.then(u => {
+			assert(u.id === found.id, 'id mismatch');
+			assert(u.name === found.name, 'name mismatch');
+			assert(u.greet() === `Hello, ${u.name}`, 'bad greeting');
+		})
+		.then(() => {
+			console.log('\tfindOne succeeded');
 		});
 }
 
 module.exports = Promise.all([
 	findByIdTest(),
-	collectTest()
+	collectTest(),
+	findOneTest()
 ]);
