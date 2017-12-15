@@ -20,13 +20,6 @@ let userTable = new Table('users', {
 });
 
 class User extends BaseModel {
-	constructor(id, name, teamId) {
-		super();
-		this.id = id;
-		this.name = name;
-		this.teamId = teamId;
-	}
-
 	greet() {
 		return `Hello, ${this.name}`;
 	}
@@ -35,8 +28,12 @@ class User extends BaseModel {
 		return userTable;
 	}
 
-	static fromSQLRow(row) {
-		return new User(row.user_id, row.name);
+	static get fieldMap() {
+		return {
+			id: 'user_id',
+			teamId: 'team_id',
+			name: 'name'
+		}
 	}
 }
 
@@ -76,22 +73,12 @@ let teamTable = new Table('teams', {
 });
 
 class Team extends BaseModel {
-	constructor(id, name) {
-		super();
-		this.teamId = id;
-		this.name = name;
-	}
-
 	cheer() {
 		console.log(`Go ${this.name}!`);
 	}
 
 	static get table() {
 		return teamTable;
-	}
-
-	static fromSQLRow(row) {
-		return new Team(row.team_id, row.name);
 	}
 }
 
@@ -147,16 +134,6 @@ let gameTable = new Table('games', {
 });
 
 class Game extends BaseModel {
-	constructor(id, date) {
-		super();
-		this.id = id;
-		this.date = date;
-	}
-
-	fromSQLRow(row) {
-		return new Game(row.game_id, moment(row.date));
-	}
-
 	static get table() {
 		return gameTable;
 	}

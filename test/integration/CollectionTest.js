@@ -25,9 +25,6 @@ function collectTest() {
 
 			assert(count === collectCount, 'Counts did not match');
 			assert(u[0].every(m => m.greet), 'Results do not appear to be users');
-		})
-		.then(() => {
-			process.exit(0);
 		});
 }
 
@@ -39,19 +36,17 @@ function findByIdTest() {
 				id: r.rows[0].user_id,
 				name: r.rows[0].name
 			};
+
+			return users.findById(found.id);
 		})
 		.then(u => {
-			assert(u.id = found.id, 'id mismatch');
-			assert(u.name = found.name, 'name mismatch');
+			assert(u.id === found.id, 'id mismatch');
+			assert(u.name === found.name, 'name mismatch');
 			assert(u.greet() === `Hello, ${u.name}`, 'bad greeting');
 		});
 }
 
-function test() {
-	return Promise.all([
-		findByIdTest,
-		collectTest
-	]);
-}
-
-module.exports = test;
+module.exports = Promise.all([
+	findByIdTest(),
+	collectTest()
+]);

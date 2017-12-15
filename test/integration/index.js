@@ -1,4 +1,3 @@
-module.exports = Promise.all([
-	require('./CollectionTest')
-])
-	.then(() => console.log('Integration tests passed'));
+module.exports = require('./CollectionTest')
+	.then(() => console.log('Integration tests passed'))
+	.catch(console.log);
