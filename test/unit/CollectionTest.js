@@ -2,18 +2,12 @@
 let assert = require('assert');
 
 let {
-	User,
 	UserCollection,
-	Team,
-	TeamCollection,
 	GameCollection
 } = require('./bootstrap');
 
 let users = new UserCollection();
 let camerons = users.filter({ name: 'Cameron' });
-
-let teams = new TeamCollection()
-	.filter({ name: 'Buttkickers' });
 
 let games = new GameCollection()
 	.filter({

@@ -1,4 +1,4 @@
-let { Client, Pool } = require('pg');
+let { Pool } = require('pg');
 
 /**
 * Root of the ORM
@@ -10,7 +10,7 @@ class ORM {
 		this.pool = new Pool({
 			connectionString: opts.dbUrl
 		});
-	};
+	}
 
 	get BaseCollection() {
 		return require('./lib/BaseCollection')(this.pool);

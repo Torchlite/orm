@@ -2,11 +2,7 @@
 let assert = require('assert');
 
 let {
-	User,
-	UserCollection,
-	Team,
-	TeamCollection,
-	GameCollection
+	User
 } = require('./bootstrap');
 
 let user = new User({ id: null, name: 'Cameron', teamId: 10 });

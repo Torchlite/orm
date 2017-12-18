@@ -27,7 +27,7 @@ class User extends BaseModel {
 			id: 'user_id',
 			name: 'name',
 			teamId: 'team_id'
-		}
+		};
 	}
 
 	static get table() {
@@ -87,7 +87,7 @@ class Team extends BaseModel {
 		return {
 			teamId: 'team_id',
 			name: 'name'
-		}
+		};
 	}
 }
 
@@ -135,7 +135,7 @@ let gameTable = new Table('games', {
 });
 
 class Game extends BaseModel {
-	constructor (obj) {
+	constructor(obj) {
 		super(obj);
 	}
 
@@ -155,7 +155,7 @@ class Game extends BaseModel {
 		return {
 			gameId: 'game_id',
 			date: 'date'
-		}
+		};
 	}
 }
 

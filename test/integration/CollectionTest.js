@@ -5,11 +5,7 @@ let pool = new Pool({
 });
 
 let {
-	User,
-	UserCollection,
-	Team,
-	TeamCollection,
-	GameCollection
+	UserCollection
 } = require('./bootstrap');
 
 let users = new UserCollection();

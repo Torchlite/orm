@@ -1,15 +1,8 @@
 let assert = require('assert');
-let { Pool } = require('pg');
-let pool = new Pool({
-	connectionString: 'postgres://localhost:5432/testerino'
-});
 
 let {
 	User,
-	UserCollection,
-	Team,
-	TeamCollection,
-	GameCollection
+	UserCollection
 } = require('./bootstrap');
 
 function saveTest() {
@@ -26,13 +19,14 @@ function saveTest() {
 }
 
 function updateTest() {
-	return new users().findOne()
+	return new UserCollection().findOne()
 		.then(u => {
-			let 
+			// stub
 		});
 }
 
 module.exports = Promise.all([
-	saveTest()
+	saveTest(),
+	updateTest()
 ]);
 

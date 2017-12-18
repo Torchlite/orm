@@ -3,38 +3,11 @@ const { Client } = require('pg');
 const Promise = require('bluebird');
 const fs = require('fs');
 const commandLineArgs = require('command-line-args');
-const getUsage = require('command-line-usage');
 
 const argSchema = [
 	{ name: 'db_url', alias: 'd', type: String },
 	{ name: 'output', alias: 'o', type: String },
 	{ name: 'help', alias: 'h', type: String }
-];
-
-const usage = [
-	{
-		header: 'Schema Derive',
-		content: 'Generates JSON for use with Torchlite ORM Models and Collections'
-	},
-	{
-		header: 'Options',
-		optionList: [
-			{
-				name: 'db_url',
-				typeLabel: '[underline]{db_url}',
-				description: 'Database URL to look at'
-			},
-			{
-				name: 'output',
-				typeLabel: '[underline]{output}',
-				description: 'Location to write the file.'
-			},
-			{
-				name: 'help',
-				description: 'Print this usage guide.'
-			}
-		]
-	}
 ];
 
 const args = commandLineArgs(argSchema);

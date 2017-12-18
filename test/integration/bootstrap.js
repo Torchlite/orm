@@ -33,7 +33,7 @@ class User extends BaseModel {
 			id: 'user_id',
 			teamId: 'team_id',
 			name: 'name'
-		}
+		};
 	}
 }
 

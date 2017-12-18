@@ -11,7 +11,7 @@ let foo = new Filter({
 });
 
 foo.applyToSql(q);
-assert(q.toString() === 'SELECT * FROM clients WHERE (client_id = 1)', q.toString())
+assert(q.toString() === 'SELECT * FROM clients WHERE (client_id = 1)', q.toString());
 
 q = squel.select()
 	.from('clients');
@@ -29,7 +29,7 @@ foo = new Filter({
 		$ne: null
 	},
 	order: {
-		$in: [1,2,3,4,5]
+		$in: [1, 2, 3, 4, 5]
 	}
 });
 foo.applyToSql(q);
@@ -41,7 +41,7 @@ let trueClient = {
 	employee_count: 230,
 	archived: false,
 	order: 2
-}
+};
 
 let falseOrderClient = {
 	name: 'TeamCo',
@@ -49,7 +49,7 @@ let falseOrderClient = {
 	employee_count: 230,
 	archived: false,
 	order: 6
-}
+};
 
 let falseClient = {
 	name: 'OtherCo',
@@ -57,7 +57,7 @@ let falseClient = {
 	employee_count: 230,
 	archived: false,
 	order: 4
-}
+};
 
 let fooFun = foo.toJsFilter();
 

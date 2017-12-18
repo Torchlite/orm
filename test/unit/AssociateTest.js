@@ -3,18 +3,15 @@ let Associate = require('../../lib/Associate')();
 let assert = require('assert');
 let {
 	User,
-	UserCollection,
 	Team,
-	TeamCollection,
-	GameCollection,
 	Game
 } = require('./bootstrap');
 
 Associate.impl(User, [Team], {
-	associationType: function() {
-		return 'oneToMany'
+	associationType: function () {
+		return 'oneToMany';
 	},
-	foreignKey: function() {
+	foreignKey: function () {
 		return {
 			col: 'team_id',
 			val: 'teamId'
@@ -23,10 +20,10 @@ Associate.impl(User, [Team], {
 });
 
 Associate.impl(Team, [User], {
-	associationType: function() {
-		return 'manyToOne'
+	associationType: function () {
+		return 'manyToOne';
 	},
-	foreignKey: function() {
+	foreignKey: function () {
 		return {
 			col: 'team_id',
 			val: 'teamId'
@@ -35,28 +32,27 @@ Associate.impl(Team, [User], {
 });
 
 Associate.impl(Team, [Game], {
-	associationType: function() {
+	associationType: function () {
 		return 'manyToMany';
 	},
 
-	foreignKey: function() {
+	foreignKey: function () {
 		return {
 			col: 'team_id',
 			val: 'teamId'
-		}
+		};
 	},
-	otherKey: function() {
+	otherKey: function () {
 		return {
 			col: 'game_id',
 			val: 'game_id'
-		}
+		};
 	},
-	joinTable: function() {
-		return 'game_teams'
+	joinTable: function () {
+		return 'game_teams';
 	}
 });
 
-let g = new Game({ gameId: 1, date: '2017-08-15' });
 let t = new Team({ teamId: 1, name: 'Crushinators' });
 let u = new User({ userId: 1, name: 'John', teamId: 10 });
 
