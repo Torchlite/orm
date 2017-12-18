@@ -20,8 +20,12 @@ function saveTest() {
 
 function updateTest() {
 	return new UserCollection().findOne()
-		.then(u => {
-			// stub
+		.then(u => u.update({ name: 'Jebediah' }))
+		.then(r => {
+			assert(r.id, 'No ID on the updated model');
+			assert(r.teamId, 'No teamId on the updated model result');
+			assert(r.name === 'Jebediah', 'name incorrect');
+			assert(r.greet() === 'Hello, Jebediah', 'greeting incorrect');
 		});
 }
 
