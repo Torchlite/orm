@@ -1,19 +1,12 @@
 #!/usr/bin/env node
+require('dotenv').config();
+
 const { Client } = require('pg');
 const Promise = require('bluebird');
 const fs = require('fs');
-const commandLineArgs = require('command-line-args');
-
-const argSchema = [
-	{ name: 'db_url', alias: 'd', type: String },
-	{ name: 'output', alias: 'o', type: String },
-	{ name: 'help', alias: 'h', type: String }
-];
-
-const args = commandLineArgs(argSchema);
 
 const client = new Client({
-	connectionString: args.db_url
+	connectionString: process.env.DATABASE_URL
 });
 
 const colsQuery = tableName => {
@@ -81,11 +74,14 @@ client
 		});
 	})
 	.then(() => {
-		let data = `// This file is generated
-module.exports = ${JSON.stringify(schema, null, 5)}
-`;
-		return fs.writeFileSync(args.output, data);
+		const ordered = {};
+		Object.keys(schema).sort().forEach(k => {
+			ordered[key] = schema[key];
+		});
+
+		const data = JSON.stringify(ordered);
+
+		return fs.writeFileSync('schema.json', data);
 	})
 	.then(() => process.exit(0))
 	.catch(console.log);
-
