@@ -29,6 +29,7 @@ function collectTest() {
 
 function findByIdTest() {
 	let found;
+
 	return pool.query(`select user_id, name from users limit 1`)
 		.then(r => {
 			found = {
@@ -40,7 +41,7 @@ function findByIdTest() {
 		})
 		.then(u => {
 			assert(u.id === found.id, 'id mismatch');
-			assert(u.name === found.name, 'name mismatch');
+			assert(u.name === found.name, `name mismatch: Expected ${u.name} but got ${found.name}`);
 			assert(u.greet() === `Hello, ${u.name}`, 'bad greeting');
 		})
 		.then(() => {
@@ -61,7 +62,7 @@ function findOneTest() {
 		})
 		.then(u => {
 			assert(u.id === found.id, 'id mismatch');
-			assert(u.name === found.name, 'name mismatch');
+			assert(u.name === found.name, `name mismatch: Expected ${u.name} but got ${found.name}`);
 			assert(u.greet() === `Hello, ${u.name}`, 'bad greeting');
 		})
 		.then(() => {

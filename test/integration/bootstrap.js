@@ -15,7 +15,10 @@ let userTable = new Table('users', {
 		isPrimaryKey: true
 	},
 	name: {
-		type: 'date'
+		type: 'text'
+	},
+	created_at: {
+		type: 'timestamp with time zone'
 	}
 });
 
