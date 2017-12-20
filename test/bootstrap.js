@@ -1,4 +1,5 @@
 'use strict';
+require('dotenv').config();
 let ORM = require('../index');
 
 let {
@@ -7,7 +8,7 @@ let {
 	BaseModel,
 	Table
 } = new ORM({
-	dbUrl: 'postgres://localhost:5432/testerino'
+	dbUrl: process.env.TEST_DB_URL
 });
 
 let userTable = new Table('users', {
