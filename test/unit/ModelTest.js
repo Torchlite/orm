@@ -3,12 +3,12 @@ let assert = require('assert');
 
 let {
 	User
-} = require('./bootstrap');
+} = require('../bootstrap');
 
 let user = new User({ id: null, name: 'Cameron', teamId: 10 });
 let user2 = new User({ id: 2, name: 'Cameron', teamId: 10 });
 
-assert(user.saveSql() === `INSERT INTO users (name, team_id) VALUES ('Cameron', 10) ON CONFLICT (user_id) DO UPDATE SET name = 'Cameron', team_id = 10 RETURNING user_id, name, team_id`, `Create query is wrong: ${user.saveSql()}`);
-assert(user2.saveSql() === `INSERT INTO users (user_id, name, team_id) VALUES (2, 'Cameron', 10) ON CONFLICT (user_id) DO UPDATE SET name = 'Cameron', team_id = 10 RETURNING user_id, name, team_id`, `Update query is wrong: ${user2.saveSql()}`);
+assert(user._saveSql() === `INSERT INTO users (user_id, team_id, name) VALUES (DEFAULT, 10, 'Cameron') ON CONFLICT (user_id) DO UPDATE SET team_id = 10, name = 'Cameron' RETURNING user_id, team_id, name`, `Create query is wrong: ${user._saveSql()}`);
+assert(user2._saveSql() === `INSERT INTO users (user_id, team_id, name) VALUES (2, 10, 'Cameron') ON CONFLICT (user_id) DO UPDATE SET team_id = 10, name = 'Cameron' RETURNING user_id, team_id, name`, `Update query is wrong: ${user2._saveSql()}`);
 
-assert(user2.updateSql({ name: 'John' }) === `UPDATE users SET name = 'John' WHERE (user_id = 2) RETURNING user_id, name, team_id`, `Update failed: ${user2.updateSql({ name: 'John' })}`);
+assert(user2._updateSql({ name: 'John' }) === `UPDATE users SET name = 'John' WHERE (user_id = 2) RETURNING user_id, team_id, name`, `Update query is wrong: ${user2._updateSql({ name: 'John' })}`);

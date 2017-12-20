@@ -1,41 +1,46 @@
 'use strict';
+let ORM = require('../index');
 
-let BaseCollection = require('../../lib/BaseCollection')();
-let BaseModel = require('../../lib/BaseModel')();
-let Table = require('../../lib/Table');
+let {
+	Associate,
+	BaseCollection,
+	BaseModel,
+	Table
+} = new ORM({
+	dbUrl: 'postgres://localhost:5432/testerino'
+});
 
 let userTable = new Table('users', {
 	user_id: {
 		type: 'integer',
 		isPrimaryKey: true
 	},
+	name: {
+		type: 'text'
+	},
 	team_id: {
 		type: 'integer'
 	},
-	name: {
-		type: 'date'
+	created_at: {
+		type: 'timestamp with time zone'
 	}
 });
 
 class User extends BaseModel {
 	greet() {
-		console.log(`Hello, ${this.name}`);
-	}
-
-	static get fieldMap() {
-		return {
-			id: 'user_id',
-			name: 'name',
-			teamId: 'team_id'
-		};
+		return `Hello, ${this.name}`;
 	}
 
 	static get table() {
 		return userTable;
 	}
 
-	static fromSQLRow(row) {
-		return new User(row);
+	static get fieldMap() {
+		return {
+			id: 'user_id',
+			teamId: 'team_id',
+			name: 'name'
+		};
 	}
 }
 
@@ -79,15 +84,11 @@ class Team extends BaseModel {
 		return teamTable;
 	}
 
-	static fromSQLRow(row) {
-		return new Team(row.team_id, row.name);
-	}
-
 	static get fieldMap() {
 		return {
 			teamId: 'team_id',
 			name: 'name'
-		};
+		}
 	}
 }
 
@@ -119,8 +120,7 @@ class GameCollection extends BaseCollection {
 	}
 
 	static get associatedClass() {
-		// who cares
-		return Team;
+		return Game;
 	}
 }
 
@@ -135,14 +135,6 @@ let gameTable = new Table('games', {
 });
 
 class Game extends BaseModel {
-	constructor(obj) {
-		super(obj);
-	}
-
-	fromSQLRow(row) {
-		return new Game(row);
-	}
-
 	static get table() {
 		return gameTable;
 	}
@@ -155,11 +147,58 @@ class Game extends BaseModel {
 		return {
 			gameId: 'game_id',
 			date: 'date'
-		};
+		}
 	}
 }
 
+Associate.impl(User, [Team], {
+	associationType: function () {
+		return 'manyToOne';
+	},
+	foreignKey: function () {
+		return {
+			col: 'team_id',
+			val: 'teamId'
+		};
+	}
+});
+
+Associate.impl(Team, [User], {
+	associationType: function () {
+		return 'oneToMany';
+	},
+	foreignKey: function () {
+		return {
+			col: 'team_id',
+			val: 'teamId'
+		};
+	}
+});
+
+Associate.impl(Team, [Game], {
+	associationType: function () {
+		return 'manyToMany';
+	},
+
+	foreignKey: function () {
+		return {
+			col: 'team_id',
+			val: 'teamId'
+		};
+	},
+	otherKey: function () {
+		return {
+			col: 'game_id',
+			val: 'gameId'
+		};
+	},
+	joinTable: function () {
+		return 'game_teams';
+	}
+});
+
 module.exports = {
+	Associate,
 	User,
 	UserCollection,
 	Team,

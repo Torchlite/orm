@@ -4,7 +4,7 @@ let assert = require('assert');
 let {
 	UserCollection,
 	GameCollection
-} = require('./bootstrap');
+} = require('../bootstrap');
 
 let users = new UserCollection();
 let camerons = users.filter({ name: 'Cameron' });

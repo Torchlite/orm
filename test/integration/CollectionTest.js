@@ -6,7 +6,7 @@ let pool = new Pool({
 
 let {
 	UserCollection
-} = require('./bootstrap');
+} = require('../bootstrap');
 
 let users = new UserCollection();
 

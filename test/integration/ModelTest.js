@@ -2,8 +2,12 @@ let assert = require('assert');
 
 let {
 	User,
-	UserCollection
-} = require('./bootstrap');
+	UserCollection,
+	Team,
+	TeamCollection,
+	Game,
+	GameCollection
+} = require('../bootstrap');
 
 function saveTest() {
 	let u = new User({ teamId: 10, name: 'Cameron' });
@@ -26,11 +30,68 @@ function updateTest() {
 			assert(r.teamId, 'No teamId on the updated model result');
 			assert(r.name === 'Jebediah', 'name incorrect');
 			assert(r.greet() === 'Hello, Jebediah', 'greeting incorrect');
-		});
+		})
+		.then(() => console.log('\tupdate succeeded'));
+}
+
+function m1AddTest() {
+	let user;
+	let team;
+
+	return Promise.all([
+		new UserCollection().findOne(),
+		new TeamCollection().findOne()
+	])
+		.then(([u, t]) => {
+			user = u;
+			team = t;
+
+			user.teamId = null;
+			return user.save()
+				.then(saved => {
+					assert(saved.teamId === null, saved.teamId);
+				});
+		})
+		.then(() => user.add(team))
+		.then(() => new UserCollection().findById(user.id))
+		.then(newUser => {
+			assert(newUser.teamId === team.teamId, 'user has the wrong teamId')
+		})
+		.then(() => console.log('\t`add` (manyToOne) succeeded'))
+		.catch(console.log);
+}
+
+function _1mAddTest() {
+	let user;
+	let team;
+
+	return Promise.all([
+		new UserCollection().findOne(),
+		new TeamCollection().findOne()
+	])
+		.then(([u, t]) => {
+			user = u;
+			team = t;
+
+			user.teamId = null;
+			return user.save()
+				.then(saved => {
+					assert(saved.teamId === null, saved.teamId);
+				});
+		})
+		.then(() => team.add(user))
+		.then(() => new UserCollection().findById(user.id))
+		.then(newUser => {
+			assert(newUser.teamId === team.teamId, 'user has the wrong teamId')
+		})
+		.then(() => console.log('\t`add` (oneToMany) succeeded'))
+		.catch(console.log);
 }
 
 module.exports = Promise.all([
 	saveTest(),
-	updateTest()
+	updateTest(),
+	m1AddTest(),
+	_1mAddTest()
 ]);
 

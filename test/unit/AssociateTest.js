@@ -1,15 +1,15 @@
 'use strict';
-let Associate = require('../../lib/Associate')();
 let assert = require('assert');
 let {
+	Associate,
 	User,
 	Team,
 	Game
-} = require('./bootstrap');
+} = require('../bootstrap');
 
 Associate.impl(User, [Team], {
 	associationType: function () {
-		return 'oneToMany';
+		return 'manyToOne';
 	},
 	foreignKey: function () {
 		return {
@@ -21,7 +21,7 @@ Associate.impl(User, [Team], {
 
 Associate.impl(Team, [User], {
 	associationType: function () {
-		return 'manyToOne';
+		return 'oneToMany';
 	},
 	foreignKey: function () {
 		return {
@@ -56,10 +56,10 @@ Associate.impl(Team, [Game], {
 let t = new Team({ teamId: 1, name: 'Crushinators' });
 let u = new User({ id: 1, name: 'John', teamId: 10 });
 
-assert(u._getSql(Team) === 'SELECT teams.team_id, teams.name FROM teams WHERE (team_id = 10)', 'oneToMany get failed');
-assert(t._getSql(User) === 'SELECT users.user_id, users.team_id, users.name FROM users WHERE (team_id = 1)', 'manyToOne get failed');
+assert(u._getSql(Team) === 'SELECT teams.team_id, teams.name FROM teams WHERE (team_id = 10)', 'manyToOne get failed');
+assert(t._getSql(User) === 'SELECT users.user_id, users.name, users.team_id, users.created_at FROM users WHERE (team_id = 1)', 'oneToMany get failed: ' + t._getSql(User));
 assert(t._getSql(Game) === 'SELECT games.game_id, games.date FROM games INNER JOIN game_teams ON (games.game_id = game_teams.game_id) WHERE (team_id=1)', `manyToMany get failed: ${t._getSql(Game)}`);
 
-assert(u._addSql(new Team({ teamId: 3 })) === 'UPDATE users SET team_id = 3 WHERE (user_id = 1)', 'oneToMany add failed');
-assert(t._addSql(new User({ id: 5 })) === 'UPDATE users SET team_id = 1 WHERE (user_id = 5)', 'manyToOne add failed');
+assert(u._addSql(new Team({ teamId: 3 })) === 'UPDATE users SET team_id = 3 WHERE (user_id = 1)', `manyToOne add failed: ${u._addSql(new Team({ teamId: 3 }))}`);
+assert(t._addSql(new User({ id: 5 })) === 'UPDATE users SET team_id = 1 WHERE (user_id = 5)', `oneToMany add failed: ${t._addSql(new User({ id: 5 }))}`);
 assert(t._addSql(new Game({ gameId: 10 })) === 'INSERT INTO game_teams (team_id, game_id) VALUES (1, 10)', `manyToMany add failed: ${t._addSql(new Game({ gameId: 10 }))}`);
