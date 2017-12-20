@@ -6,6 +6,7 @@ let {
 	Team,
 	Game
 } = require('../bootstrap');
+let Filter = require('../../lib/Filter');
 
 Associate.impl(User, [Team], {
 	associationType: function () {
@@ -59,6 +60,8 @@ let u = new User({ id: 1, name: 'John', teamId: 10 });
 assert(u._getSql(Team) === 'SELECT teams.team_id, teams.name FROM teams WHERE (team_id = 10)', 'manyToOne get failed');
 assert(t._getSql(User) === 'SELECT users.user_id, users.name, users.team_id, users.created_at FROM users WHERE (team_id = 1)', 'oneToMany get failed: ' + t._getSql(User));
 assert(t._getSql(Game) === 'SELECT games.game_id, games.date FROM games INNER JOIN game_teams ON (games.game_id = game_teams.game_id) WHERE (team_id=1)', `manyToMany get failed: ${t._getSql(Game)}`);
+
+console.log(u._getSql(Team, new Filter({ name: 'Foobar' })));
 
 assert(u._addSql(new Team({ teamId: 3 })) === 'UPDATE users SET team_id = 3 WHERE (user_id = 1)', `manyToOne add failed: ${u._addSql(new Team({ teamId: 3 }))}`);
 assert(t._addSql(new User({ id: 5 })) === 'UPDATE users SET team_id = 1 WHERE (user_id = 5)', `oneToMany add failed: ${t._addSql(new User({ id: 5 }))}`);
