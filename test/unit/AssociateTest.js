@@ -4,7 +4,8 @@ let {
 	Associate,
 	User,
 	Team,
-	Game
+	Game,
+	Table
 } = require('../bootstrap');
 let Filter = require('../../lib/Filter');
 
@@ -50,7 +51,14 @@ Associate.impl(Team, [Game], {
 		};
 	},
 	joinTable: function () {
-		return 'game_teams';
+		return new Table('game_teams', {
+			game_id: {
+				type: 'integer'
+			},
+			team_id: {
+				type: 'integer'
+			}
+		});
 	}
 });
 
