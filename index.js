@@ -35,6 +35,10 @@ class ORM {
 	get squel() {
 		return require('squel');
 	}
+
+	query(q) {
+		return this.pool.query(q);
+	}
 }
 
 module.exports = ORM;

@@ -1,12 +1,17 @@
 'use strict';
+
 require('dotenv').config();
+
+let assert = require('assert');
+
 let ORM = require('../index');
 
 let {
 	Associate,
 	BaseCollection,
 	BaseModel,
-	Table
+	Table,
+	query
 } = new ORM({
 	dbUrl: process.env.TEST_DB_URL
 });
