@@ -78,3 +78,5 @@ assert(t._getSql(Game, f) === `SELECT games.game_id, games.date, game_teams.game
 assert(u._addSql(new Team({ teamId: 3 })) === 'UPDATE users SET team_id = 3 WHERE (user_id = 1)', `manyToOne add failed: ${u._addSql(new Team({ teamId: 3 }))}`);
 assert(t._addSql(new User({ id: 5 })) === 'UPDATE users SET team_id = 1 WHERE (user_id = 5)', `oneToMany add failed: ${t._addSql(new User({ id: 5 }))}`);
 assert(t._addSql(new Game({ gameId: 10 })) === 'INSERT INTO game_teams (team_id, game_id) VALUES (1, 10) RETURNING game_id, team_id', `manyToMany add failed: ${t._addSql(new Game({ gameId: 10 }))}`);
+
+assert(u._getSql(Team, f, 10, 50) === `SELECT teams.team_id, teams.name FROM teams WHERE (team_id = 10) AND (name = 'a name') LIMIT 10 OFFSET 50`, 'limit/offset failed');
