@@ -13,11 +13,15 @@ class ORM {
 	}
 
 	get BaseCollection() {
-		return require('./lib/BaseCollection')(this.pool);
+		let c = require('./lib/BaseCollection');
+		c.init(this.pool);
+		return c;
 	}
 
 	get BaseModel() {
-		return require('./lib/BaseModel')(this.pool);
+		let m = require('./lib/BaseModel');
+		m.init(this.pool);
+		return m;
 	}
 
 	get Filter() {

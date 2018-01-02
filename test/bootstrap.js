@@ -78,6 +78,9 @@ let teamTable = new Table('teams', {
 	},
 	name: {
 		type: 'string'
+	},
+	owner: {
+		type: 'integer'
 	}
 });
 
@@ -93,7 +96,8 @@ class Team extends BaseModel {
 	static get fieldMap() {
 		return {
 			teamId: 'team_id',
-			name: 'name'
+			name: 'name',
+			owner: 'owner'
 		}
 	}
 }
