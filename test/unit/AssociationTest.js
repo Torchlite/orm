@@ -1,39 +1,39 @@
-let { User, Team, Game } = require('../bootstrap');
+let assert = require('assert');
 
-async function main() {
-	class Owner extends User {}
-	// Basic oneToMany
-	Team.hasMany(User, {
-		key: 'teamId',
-		references: 'teamId'
-	}, 'users');
+let { User, Team } = require('../bootstrap');
 
-	User.hasOne(Team, {
-		key: 'teamId',
-		references: 'teamId'
-	}, 'team');
+class Owner extends User {}
+// Basic oneToMany
+Team.hasMany(User, {
+	key: 'teamId',
+	references: 'teamId'
+}, 'users');
 
-	Team.hasOne(Owner, {
-		key: 'owner',
-		references: 'id'
-	}, 'owner')
+User.hasOne(Team, {
+	key: 'teamId',
+	references: 'teamId'
+}, 'team');
 
-	let t = new Team({ teamId: 1 });
-	let user = new User({
-		userId: 1,
-		teamId: 10
-	})
+Team.hasOne(Owner, {
+	key: 'owner',
+	references: 'id'
+}, 'owner');
 
-	let collection = t.related(User)
-		.filter({
-			name: 'John'
-		});
+let t = new Team({ teamId: 1 });
+let user = new User({
+	userId: 1,
+	teamId: 10
+});
 
-	let owner = await user
-		.related(Team).fetch()
-		.then(t => t.related(Owner).fetch());
+let collection = t.related(User)
+	.filter({
+		name: 'John'
+	});
 
-	console.log(owner);
-}
+let userTeam = user.related(Team);
 
-main();
+assert(collection.toSql() === 'SELECT user_id, name, team_id, created_at FROM users WHERE (team_id = 1 AND name = \'John\')');
+
+assert(typeof userTeam.cheer === 'function');
+assert(typeof userTeam.teamId === 'number', `Team id type: ${typeof userTeam.teamId}`);
+assert(userTeam.teamId === 10, `Team id: ${userTeam.teamId}`);

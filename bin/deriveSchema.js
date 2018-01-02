@@ -76,7 +76,7 @@ client
 	.then(() => {
 		const ordered = {};
 		Object.keys(schema).sort().forEach(k => {
-			ordered[key] = schema[key];
+			ordered[k] = schema[k];
 		});
 
 		const data = JSON.stringify(ordered);

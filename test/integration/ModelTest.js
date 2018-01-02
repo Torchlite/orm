@@ -3,10 +3,7 @@ let assert = require('assert');
 let {
 	User,
 	UserCollection,
-	Team,
-	TeamCollection,
-	Game,
-	GameCollection
+	TeamCollection
 } = require('../bootstrap');
 
 function saveTest() {
@@ -55,7 +52,7 @@ function m1AddTest() {
 		.then(() => user.add(team))
 		.then(() => new UserCollection().findById(user.id))
 		.then(newUser => {
-			assert(newUser.teamId === team.teamId, 'user has the wrong teamId')
+			assert(newUser.teamId === team.teamId, 'user has the wrong teamId');
 		})
 		.then(() => console.log('\t`add` (manyToOne) succeeded'))
 		.catch(console.log);
@@ -82,7 +79,7 @@ function _1mAddTest() {
 		.then(() => team.add(user))
 		.then(() => new UserCollection().findById(user.id))
 		.then(newUser => {
-			assert(newUser.teamId === team.teamId, 'user has the wrong teamId')
+			assert(newUser.teamId === team.teamId, 'user has the wrong teamId');
 		})
 		.then(() => console.log('\t`add` (oneToMany) succeeded'))
 		.catch(console.log);
