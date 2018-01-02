@@ -211,5 +211,6 @@ module.exports = {
 	TeamCollection,
 	GameCollection,
 	Game,
-	Table
+	Table,
+	BaseCollection
 };
