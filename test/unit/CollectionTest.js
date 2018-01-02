@@ -24,7 +24,7 @@ let games = new GameCollection()
 	})
 	.limit(10)
 	.offset(55)
-	.order('gameId', 'desc');
+	.sort('gameId', 'desc');
 
 assert(users.toSql() === 'SELECT user_id, team_id, name FROM users', 'Simple unfiltered returned ' + users.toSql());
 assert(camerons.toSql() === `SELECT user_id, team_id, name FROM users WHERE (name = 'Cameron')`, 'Simple filter returned ' + camerons.toSql());
