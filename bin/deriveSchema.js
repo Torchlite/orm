@@ -78,7 +78,7 @@ client
 		Object.keys(schema).sort().forEach(k => {
 			const innerOrdered = {};
 			Object.keys(schema[k]).sort().forEach(k2 => {
-				innerOrdered[k2] = schema[k2];
+				innerOrdered[k2] = schema[k][k2];
 			});
 
 			ordered[k] = innerOrdered;

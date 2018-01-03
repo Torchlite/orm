@@ -1,0 +1,46 @@
+{
+	"games": {
+		"date": {
+			"type": "timestamp with time zone"
+		},
+		"game_id": {
+			"type": "integer",
+			"isPrimaryKey": true
+		}
+	},
+	"team_games": {
+		"game_id": {
+			"type": "integer"
+		},
+		"team_id": {
+			"type": "integer"
+		}
+	},
+	"teams": {
+		"name": {
+			"type": "text"
+		},
+		"owner": {
+			"type": "integer"
+		},
+		"team_id": {
+			"type": "integer",
+			"isPrimaryKey": true
+		}
+	},
+	"users": {
+		"created_at": {
+			"type": "timestamp with time zone"
+		},
+		"name": {
+			"type": "text"
+		},
+		"team_id": {
+			"type": "integer"
+		},
+		"user_id": {
+			"type": "integer",
+			"isPrimaryKey": true
+		}
+	}
+}
