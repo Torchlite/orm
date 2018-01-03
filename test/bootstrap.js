@@ -40,7 +40,7 @@ class User extends BaseModel {
 
 	static get fieldMap() {
 		return {
-			id: 'user_id',
+			userId: 'user_id',
 			teamId: 'team_id',
 			name: 'name'
 		};
@@ -61,7 +61,7 @@ let teamTable = new Table('teams', {
 	name: {
 		type: 'string'
 	},
-	owner: {
+	owner_id: {
 		type: 'integer'
 	}
 });
@@ -79,7 +79,7 @@ class Team extends BaseModel {
 		return {
 			teamId: 'team_id',
 			name: 'name',
-			owner: 'owner'
+			ownerId: 'owner_id'
 		};
 	}
 }
