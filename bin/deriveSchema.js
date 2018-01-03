@@ -76,10 +76,15 @@ client
 	.then(() => {
 		const ordered = {};
 		Object.keys(schema).sort().forEach(k => {
-			ordered[k] = schema[k];
+			const innerOrdered = {};
+			Object.keys(schema[k]).sort().forEach(k2 => {
+				innerOrdered[k2] = schema[k2];
+			});
+
+			ordered[k] = innerOrdered;
 		});
 
-		const data = JSON.stringify(ordered);
+		const data = JSON.stringify(ordered, null, '\t');
 
 		return fs.writeFileSync('schema.json', data);
 	})
