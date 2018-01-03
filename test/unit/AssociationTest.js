@@ -46,3 +46,5 @@ Team.belongsToMany(Game, {
 let t = new Team({ teamId: 1 });
 
 t.owner = new User({ userId: 5 });
+
+assert(t.owner.userId === 5, 't.owner.userId was wrong');
