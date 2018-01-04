@@ -2,16 +2,13 @@
 
 require('dotenv').config();
 
-let assert = require('assert');
-
 let ORM = require('../index');
 
 let {
 	Associate,
 	BaseCollection,
 	BaseModel,
-	Table,
-	query
+	Table
 } = new ORM({
 	dbUrl: process.env.TEST_DB_URL
 });
@@ -43,7 +40,7 @@ class User extends BaseModel {
 
 	static get fieldMap() {
 		return {
-			id: 'user_id',
+			userId: 'user_id',
 			teamId: 'team_id',
 			name: 'name'
 		};
@@ -51,21 +48,6 @@ class User extends BaseModel {
 }
 
 class UserCollection extends BaseCollection {
-	static get baseTable() {
-		return new Table('users', {
-			user_id: {
-				type: 'integer',
-				isPrimaryKey: true
-			},
-			team_id: {
-				type: 'integer'
-			},
-			name: {
-				type: 'string'
-			}
-		});
-	}
-
 	static get associatedClass() {
 		return User;
 	}
@@ -78,6 +60,9 @@ let teamTable = new Table('teams', {
 	},
 	name: {
 		type: 'string'
+	},
+	owner_id: {
+		type: 'integer'
 	}
 });
 
@@ -93,40 +78,15 @@ class Team extends BaseModel {
 	static get fieldMap() {
 		return {
 			teamId: 'team_id',
-			name: 'name'
-		}
+			name: 'name',
+			ownerId: 'owner_id'
+		};
 	}
 }
 
 class TeamCollection extends BaseCollection {
-	static get baseTable() {
-		return teamTable;
-	}
-
 	static get associatedClass() {
 		return Team;
-	}
-}
-
-class GameCollection extends BaseCollection {
-	static get baseTable() {
-		return new Table('games', {
-			game_id: {
-				type: 'integer',
-				isPrimaryKey: true
-			},
-			team_id: {
-				type: 'integer',
-				isPrimaryKey: true
-			},
-			date: {
-				type: 'date'
-			}
-		});
-	}
-
-	static get associatedClass() {
-		return Game;
 	}
 }
 
@@ -145,15 +105,17 @@ class Game extends BaseModel {
 		return gameTable;
 	}
 
-	static get associatedCollection() {
-		return GameCollection;
-	}
-
 	static get fieldMap() {
 		return {
 			gameId: 'game_id',
 			date: 'date'
-		}
+		};
+	}
+}
+
+class GameCollection extends BaseCollection {
+	static get associatedClass() {
+		return Game;
 	}
 }
 
@@ -211,5 +173,6 @@ module.exports = {
 	TeamCollection,
 	GameCollection,
 	Game,
-	Table
+	Table,
+	BaseCollection
 };

@@ -3,10 +3,7 @@ let assert = require('assert');
 let {
 	User,
 	UserCollection,
-	Team,
-	TeamCollection,
-	Game,
-	GameCollection
+	TeamCollection
 } = require('../bootstrap');
 
 function saveTest() {
@@ -14,7 +11,7 @@ function saveTest() {
 
 	return u.save()
 		.then(u => {
-			assert(u.id, 'No ID on the saved model');
+			assert(u.userId, 'No ID on the saved model');
 			assert(u.teamId === 10, 'teamId incorrect');
 			assert(u.name === 'Cameron', 'name incorrect');
 			assert(u.greet() === 'Hello, Cameron', 'greeting incorrect');
@@ -26,7 +23,7 @@ function updateTest() {
 	return new UserCollection().findOne()
 		.then(u => u.update({ name: 'Jebediah' }))
 		.then(r => {
-			assert(r.id, 'No ID on the updated model');
+			assert(r.userId, 'No ID on the updated model');
 			assert(r.teamId, 'No teamId on the updated model result');
 			assert(r.name === 'Jebediah', 'name incorrect');
 			assert(r.greet() === 'Hello, Jebediah', 'greeting incorrect');
@@ -53,9 +50,9 @@ function m1AddTest() {
 				});
 		})
 		.then(() => user.add(team))
-		.then(() => new UserCollection().findById(user.id))
+		.then(() => new UserCollection().findById(user.userId))
 		.then(newUser => {
-			assert(newUser.teamId === team.teamId, 'user has the wrong teamId')
+			assert(newUser.teamId === team.teamId, 'user has the wrong teamId');
 		})
 		.then(() => console.log('\t`add` (manyToOne) succeeded'))
 		.catch(console.log);
@@ -80,9 +77,9 @@ function _1mAddTest() {
 				});
 		})
 		.then(() => team.add(user))
-		.then(() => new UserCollection().findById(user.id))
+		.then(() => new UserCollection().findById(user.userId))
 		.then(newUser => {
-			assert(newUser.teamId === team.teamId, 'user has the wrong teamId')
+			assert(newUser.teamId === team.teamId, 'user has the wrong teamId');
 		})
 		.then(() => console.log('\t`add` (oneToMany) succeeded'))
 		.catch(console.log);

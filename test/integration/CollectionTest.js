@@ -40,7 +40,7 @@ function findByIdTest() {
 			return users.findById(found.id);
 		})
 		.then(u => {
-			assert(u.id === found.id, 'id mismatch');
+			assert(u.userId === found.id, 'id mismatch');
 			assert(u.name === found.name, `name mismatch: Expected ${u.name} but got ${found.name}`);
 			assert(u.greet() === `Hello, ${u.name}`, 'bad greeting');
 		})
@@ -61,7 +61,7 @@ function findOneTest() {
 			return users.findOne();
 		})
 		.then(u => {
-			assert(u.id === found.id, 'id mismatch');
+			assert(u.userId === found.id, 'id mismatch');
 			assert(u.name === found.name, `name mismatch: Expected ${u.name} but got ${found.name}`);
 			assert(u.greet() === `Hello, ${u.name}`, 'bad greeting');
 		})
@@ -71,7 +71,7 @@ function findOneTest() {
 }
 
 module.exports = Promise.all([
-	findByIdTest(),
-	collectTest(),
-	findOneTest()
+	findByIdTest().catch(console.log),
+	collectTest().catch(console.log),
+	findOneTest().catch(console.log)
 ]);
