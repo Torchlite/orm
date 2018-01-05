@@ -80,3 +80,4 @@ assert(t._addSql(new User({ userId: 5 })) === 'UPDATE users SET team_id = 1 WHER
 assert(t._addSql(new Game({ gameId: 10 })) === 'INSERT INTO game_teams (team_id, game_id) VALUES (1, 10) RETURNING game_id, team_id', `manyToMany add failed: ${t._addSql(new Game({ gameId: 10 }))}`);
 
 assert(u._getSql(Team, f, 10, 50, { key: 'teamId', direction: 'desc' }) === `SELECT teams.team_id, teams.name, teams.owner_id FROM teams WHERE (team_id = 10) AND (name = 'a name') ORDER BY team_id DESC LIMIT 10 OFFSET 50`, `limit/offset failed: ${u._getSql(Team, f, 10, 50, { key: 'teamId', direction: 'desc' })}`);
+console.log('\tAssociate tests passed')

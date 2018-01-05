@@ -14,3 +14,4 @@ assert(user2._saveSql() === `INSERT INTO users (user_id, team_id, name) VALUES (
 assert(user2._updateSql({ name: 'John' }) === `UPDATE users SET name = 'John' WHERE (user_id = 2) RETURNING user_id, team_id, name`, `Update query is wrong: ${user2._updateSql({ name: 'John' })}`);
 
 assert(user2._fetchSql() === `SELECT users.user_id, users.team_id, users.name FROM users WHERE (user_id = 2)`);
+console.log('\tModel tests passed');

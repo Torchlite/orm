@@ -74,3 +74,4 @@ let bar = new Filter({
 });
 
 assert(bar.toSql() === `name = 'TeamCo' AND customer_count > 10 AND customer_count < 20`, bar.toSql());
+console.log('\tFilter tests passed');

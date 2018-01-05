@@ -37,3 +37,4 @@ assert(games.toSql() === `SELECT games.game_id, games.date FROM games WHERE (dat
 
 assert(users._countSql() === 'SELECT count(*) FROM users', users._countSql());
 assert(camerons._countSql() === `SELECT count(*) FROM users WHERE (name = 'Cameron')`, users._countSql());
+console.log('\tCollection tests passed');
