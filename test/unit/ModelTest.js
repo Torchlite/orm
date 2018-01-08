@@ -15,6 +15,9 @@ assert(user2._updateSql({ name: 'John' }) === `UPDATE users SET name = 'John' WH
 
 assert(user2._fetchSql() === `SELECT users.user_id, users.team_id, users.name, users.created_at FROM users WHERE (user_id = 2)`);
 
-assert(user._cloneSql(['userId', 'createdAt']) === `INSERT INTO users (name, team_id) VALUES ('Cameron', 10) RETURNING user_id, name, team_id, created_at`, `Clone SQL is wrong: ${user._cloneSql(['userId', 'createdAt'])}`);
-assert(user._cloneSql() === `INSERT INTO users (name, team_id, created_at) VALUES ('Cameron', 10, NULL) RETURNING user_id, name, team_id, created_at`, `Clone SQL is wrong: ${user._cloneSql()}`);
+let sql1 = user._cloneSql({ userId: '__DEFAULT', createdAt: '__DEFAULT' });
+let cloneSql2 = user._cloneSql();
+
+assert(sql1 === `INSERT INTO users (user_id, name, team_id, created_at) VALUES (DEFAULT, 'Cameron', 10, DEFAULT) RETURNING user_id, name, team_id, created_at`, `Clone SQL is wrong: ${sql1}`);
+assert(cloneSql2 === `INSERT INTO users (user_id, name, team_id, created_at) VALUES (DEFAULT, 'Cameron', 10, NULL) RETURNING user_id, name, team_id, created_at`, `Clone SQL (no argument) is wrong: ${cloneSql2}`);
 console.log('\tModel tests passed');
