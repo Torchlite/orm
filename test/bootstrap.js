@@ -42,7 +42,8 @@ class User extends BaseModel {
 		return {
 			userId: 'user_id',
 			teamId: 'team_id',
-			name: 'name'
+			name: 'name',
+			createdAt: 'created_at'
 		};
 	}
 }

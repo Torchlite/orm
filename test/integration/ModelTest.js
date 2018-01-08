@@ -85,10 +85,24 @@ function _1mAddTest() {
 		.catch(console.log);
 }
 
+async function cloneTest() {
+	let user = await new UserCollection().findOne();
+
+	return user.clone()
+		.then(newUser => {
+			assert(newUser.userId !== user.userId);
+			assert(newUser.name === user.name);
+			assert(newUser.teamId === user.teamId);
+		})
+		.then(() => console.log('\tclone succeeded'))
+		.catch(console.log);
+}
+
 module.exports = Promise.all([
 	saveTest(),
 	updateTest(),
 	m1AddTest(),
-	_1mAddTest()
+	_1mAddTest(),
+	cloneTest()
 ]);
 
