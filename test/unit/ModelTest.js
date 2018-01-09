@@ -7,7 +7,6 @@ let {
 
 let user = new User({ name: 'Cameron', teamId: 10 });
 let user2 = new User({ userId: 2, name: 'Cameron', teamId: 10 });
-let user3 = new User({ userId: 3, name: 'John' });
 
 assert(user._saveSql() === `INSERT INTO users (team_id, name) VALUES (10, 'Cameron') ON CONFLICT (user_id) DO UPDATE SET team_id = 10, name = 'Cameron' RETURNING user_id, team_id, name, created_at`, `Create query is wrong: ${user._saveSql()}`);
 assert(user2._saveSql() === `INSERT INTO users (user_id, team_id, name) VALUES (2, 10, 'Cameron') ON CONFLICT (user_id) DO UPDATE SET team_id = 10, name = 'Cameron' RETURNING user_id, team_id, name, created_at`, `Update query is wrong: ${user2._saveSql()}`);

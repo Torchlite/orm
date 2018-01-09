@@ -5,7 +5,8 @@ let pool = new Pool({
 });
 
 let {
-	UserCollection
+	UserCollection,
+	User
 } = require('../bootstrap');
 
 let users = new UserCollection();
@@ -70,8 +71,23 @@ function findOneTest() {
 		});
 }
 
+async function addTest() {
+	let added = await new UserCollection()
+		.filter({
+			teamId: 2
+		})
+		.add(new User({
+			teamId: 2,
+			name: 'Jimothy'
+		}));
+
+	assert(added.teamId === 2, 'Wrong teamId');
+	assert(added.name === 'Jimothy', 'Wrong name');
+}
+
 module.exports = Promise.all([
 	findByIdTest().catch(console.log),
 	collectTest().catch(console.log),
-	findOneTest().catch(console.log)
+	findOneTest().catch(console.log),
+	addTest().catch(console.log)
 ]);

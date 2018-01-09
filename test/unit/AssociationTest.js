@@ -4,8 +4,7 @@ let {
 	User,
 	Team,
 	Game,
-	Table,
-	BaseCollection
+	Table
 } = require('../bootstrap');
 
 class Owner extends User {}
@@ -48,4 +47,23 @@ let t = new Team({ teamId: 1 });
 t.owner = new User({ userId: 5 });
 
 assert(t.owner.userId === 5, 't.owner.userId was wrong');
-console.log('\tAssociation tests passed')
+
+t.users
+	.add(new User({
+		name: 'Brantleigh'
+	}))
+	.then(() => t.users.collect());
+
+let testAdded;
+t.games.add(new Game({
+	date: '2018-01-01'
+}))
+	.then(added => {
+		testAdded = added;
+		return t.games.collect()
+	})
+	.then(games => assert(games.some(g => g.gameId === testAdded.gameId, 'game was not added')))
+	.then(() => console.log('\tbelongsToMany add succeeded'))
+	.catch(console.log);
+
+console.log('\tAssociation tests passed');
