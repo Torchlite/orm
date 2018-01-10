@@ -42,6 +42,7 @@ Team.belongsToMany(Game, {
 	}
 }, 'games');
 
+
 let t = new Team({ teamId: 1 });
 
 t.owner = new User({ userId: 5 });
