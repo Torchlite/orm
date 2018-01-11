@@ -67,4 +67,10 @@ t.games.add(new Game({
 	.then(() => console.log('\tbelongsToMany add succeeded'))
 	.catch(console.log);
 
+let rSql = t.games._removeSql(new Game({
+	gameId: 2
+}));
+
+assert(rSql === `DELETE FROM team_games WHERE (team_id = 1 AND game_id = 2)`, `Remove SQL was wrong: ${rSql}`);
+
 console.log('\tAssociation tests passed');
