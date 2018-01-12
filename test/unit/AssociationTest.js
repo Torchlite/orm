@@ -15,7 +15,7 @@ Team.hasMany(User, {
 
 User.belongsTo(Team, {
 	key: 'teamId',
-	references: 'teamId'
+	references: 'id'
 }, 'team');
 
 Team.belongsTo(Owner, {
