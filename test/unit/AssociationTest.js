@@ -30,6 +30,9 @@ Team.belongsToMany(Game, {
 		},
 		team_id: {
 			type: 'integer'
+		},
+		result: {
+			type: 'boolean'
 		}
 	}),
 	leftKey: {
