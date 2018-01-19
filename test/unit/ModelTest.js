@@ -18,4 +18,8 @@ let cloneSql2 = user._cloneSql();
 
 assert(sql1 === `INSERT INTO users (name, team_id, user_id, created_at) VALUES ('Cameron', 10, DEFAULT, DEFAULT) RETURNING user_id, name, team_id, created_at`, `Clone SQL is wrong: ${sql1}`);
 assert(cloneSql2 === `INSERT INTO users (name, team_id, user_id) VALUES ('Cameron', 10, DEFAULT) RETURNING user_id, name, team_id, created_at`, `Clone SQL (no argument) is wrong: ${cloneSql2}`);
+
+assert.deepEqual(user.toJSON(), { name: 'Cameron', teamId: 10 })
+assert.deepEqual(user2.toJSON(), { userId: 2, name: 'Cameron', teamId: 10 })
+
 console.log('\tModel tests passed');
