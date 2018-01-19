@@ -85,9 +85,28 @@ async function addTest() {
 	assert(added.name === 'Jimothy', 'Wrong name');
 }
 
-module.exports = Promise.all([
+async function main() {
+	let team10 = new UserCollection()
+		.filter({
+			teamId: 10
+		});
+
+	team10.listen();
+
+	team10.on('add', newUser => {
+		console.log(`${newUser.name} was added to the team`);
+	});
+
+	team10.on('remove', oldUser => {
+		console.log(`${oldUser.name} was removed from the team`);
+	});
+}
+
+main();
+
+/*module.exports = Promise.all([
 	findByIdTest().catch(console.log),
 	collectTest().catch(console.log),
 	findOneTest().catch(console.log),
 	addTest().catch(console.log)
-]);
+]);*/

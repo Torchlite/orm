@@ -1,4 +1,5 @@
 let { Pool } = require('pg');
+let PGPubSub = require('pg-pubsub');
 
 /**
 * Root of the ORM
@@ -10,6 +11,8 @@ class ORM {
 		this.pool = new Pool({
 			connectionString: opts.dbUrl
 		});
+
+		this.pubsubInstance = new PGPubSub(opts.dbUrl);
 	}
 
 	get BaseCollection() {
@@ -33,7 +36,10 @@ class ORM {
 	}
 
 	get Table() {
-		return require('./lib/Table');
+		let Table = require('./lib/Table');
+		Table.init(this.pubsubInstance);
+
+		return Table;
 	}
 
 	get squel() {

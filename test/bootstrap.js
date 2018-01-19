@@ -5,7 +5,6 @@ require('dotenv').config();
 let ORM = require('../index');
 
 let {
-	Associate,
 	BaseCollection,
 	BaseModel,
 	Table
@@ -120,54 +119,7 @@ class GameCollection extends BaseCollection {
 	}
 }
 
-Associate.impl(User, [Team], {
-	associationType: function () {
-		return 'manyToOne';
-	},
-	foreignKey: function () {
-		return {
-			col: 'team_id',
-			val: 'teamId'
-		};
-	}
-});
-
-Associate.impl(Team, [User], {
-	associationType: function () {
-		return 'oneToMany';
-	},
-	foreignKey: function () {
-		return {
-			col: 'team_id',
-			val: 'teamId'
-		};
-	}
-});
-
-Associate.impl(Team, [Game], {
-	associationType: function () {
-		return 'manyToMany';
-	},
-
-	foreignKey: function () {
-		return {
-			col: 'team_id',
-			val: 'teamId'
-		};
-	},
-	otherKey: function () {
-		return {
-			col: 'game_id',
-			val: 'gameId'
-		};
-	},
-	joinTable: function () {
-		return 'game_teams';
-	}
-});
-
 module.exports = {
-	Associate,
 	User,
 	UserCollection,
 	Team,

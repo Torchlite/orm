@@ -31,60 +31,6 @@ function updateTest() {
 		.then(() => console.log('\tupdate succeeded'));
 }
 
-function m1AddTest() {
-	let user;
-	let team;
-
-	return Promise.all([
-		new UserCollection().findOne(),
-		new TeamCollection().findOne()
-	])
-		.then(([u, t]) => {
-			user = u;
-			team = t;
-
-			user.teamId = null;
-			return user.save()
-				.then(saved => {
-					assert(saved.teamId === null, saved.teamId);
-				});
-		})
-		.then(() => user.add(team))
-		.then(() => new UserCollection().findById(user.userId))
-		.then(newUser => {
-			assert(newUser.teamId === team.teamId, 'user has the wrong teamId');
-		})
-		.then(() => console.log('\t`add` (manyToOne) succeeded'))
-		.catch(console.log);
-}
-
-function _1mAddTest() {
-	let user;
-	let team;
-
-	return Promise.all([
-		new UserCollection().findOne(),
-		new TeamCollection().findOne()
-	])
-		.then(([u, t]) => {
-			user = u;
-			team = t;
-
-			user.teamId = null;
-			return user.save()
-				.then(saved => {
-					assert(saved.teamId === null, saved.teamId);
-				});
-		})
-		.then(() => team.add(user))
-		.then(() => new UserCollection().findById(user.userId))
-		.then(newUser => {
-			assert(newUser.teamId === team.teamId, 'user has the wrong teamId');
-		})
-		.then(() => console.log('\t`add` (oneToMany) succeeded'))
-		.catch(console.log);
-}
-
 async function cloneTest() {
 	let user = await new UserCollection().findOne();
 
@@ -101,8 +47,5 @@ async function cloneTest() {
 module.exports = Promise.all([
 	saveTest(),
 	updateTest(),
-	m1AddTest(),
-	_1mAddTest(),
 	cloneTest()
 ]);
-
