@@ -12,6 +12,9 @@
 		"game_id": {
 			"type": "integer"
 		},
+		"result": {
+			"type": "boolean"
+		},
 		"team_id": {
 			"type": "integer"
 		}
@@ -20,7 +23,7 @@
 		"name": {
 			"type": "text"
 		},
-		"owner": {
+		"owner_id": {
 			"type": "integer"
 		},
 		"team_id": {

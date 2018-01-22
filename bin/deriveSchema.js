@@ -20,6 +20,27 @@ const colsQuery = tableName => {
 			table_name = '${tableName}'`;
 };
 
+const virtualColsQuery = tableName => {
+	return `
+		SELECT
+			p.proname as "name",
+			pg_catalog.pg_get_function_result(p.oid) as "type",
+			CASE
+				WHEN p.proisagg THEN 'agg'
+				WHEN p.proiswindow THEN 'window'
+				WHEN p.prorettype = 'pg_catalog.trigger'::pg_catalog.regtype THEN 'trigger'
+				ELSE 'normal'
+			END as "Type"
+		FROM
+			pg_catalog.pg_proc p LEFT JOIN
+			pg_catalog.pg_namespace n ON n.oid = p.pronamespace
+		WHERE pg_catalog.pg_function_is_visible(p.oid)
+			AND n.nspname <> 'pg_catalog'
+			AND n.nspname <> 'information_schema'
+			AND pg_catalog.pg_get_function_arguments(p.oid) = '${tableName}';
+	`;
+}
+
 const tablesQuery = `
 	select
 		table_name
@@ -52,11 +73,19 @@ client
 	.then(tables => {
 		return Promise.map(tables, t => {
 			let tSchema = {};
-			return client
-				.query(colsQuery(t))
-				.then(result => {
-					result.rows.forEach(row => {
+			return Promise.all([
+				client
+					.query(colsQuery(t)),
+				client
+					.query(virtualColsQuery(t))
+			])
+				.then(([cols, vcols]) => {
+					cols.rows.forEach(row => {
 						tSchema[row.column_name] = { type: row.data_type };
+					});
+
+					vcols.rows.forEach(row => {
+						tSchema[row.name] = { type: row.type }
 					});
 				})
 				.then(() => (schema[t] = tSchema));
