@@ -8,8 +8,18 @@ let {
 let user = new User({ name: 'Cameron', teamId: 10 });
 let user2 = new User({ userId: 2, name: 'Cameron', teamId: 10 });
 
-assert(user._saveSql() === `INSERT INTO users (team_id, name) VALUES (10, 'Cameron') ON CONFLICT (user_id) DO UPDATE SET team_id = 10, name = 'Cameron' RETURNING user_id, team_id, name, created_at`, `Create query is wrong: ${user._saveSql()}`);
-assert(user2._saveSql() === `INSERT INTO users (user_id, team_id, name) VALUES (2, 10, 'Cameron') ON CONFLICT (user_id) DO UPDATE SET team_id = 10, name = 'Cameron' RETURNING user_id, team_id, name, created_at`, `Update query is wrong: ${user2._saveSql()}`);
+let expectedSave = `INSERT INTO users (name, team_id) VALUES ('Cameron', 10) ON CONFLICT (user_id) DO UPDATE SET name = 'Cameron', team_id = 10 RETURNING user_id, name, team_id, created_at`;
+let expectedUpdate = `INSERT INTO users (user_id, name, team_id) VALUES (2, 'Cameron', 10) ON CONFLICT (user_id) DO UPDATE SET name = 'Cameron', team_id = 10 RETURNING user_id, name, team_id, created_at`;
+
+assert(user._saveSql() === expectedSave, `Create query is wrong:
+	${user._saveSql()}
+	${expectedSave}
+`);
+assert(user2._saveSql() === expectedUpdate, `Update query 1 is wrong:
+	${user2._saveSql()}
+	${expectedUpdate}
+`);
+
 assert(user2._updateSql({ name: 'John' }) === `UPDATE users SET name = 'John' WHERE (user_id = 2) RETURNING user_id, team_id, name, created_at`, `Update query is wrong: ${user2._updateSql({ name: 'John' })}`);
 assert(user2._fetchSql() === `SELECT users.user_id, users.team_id, users.name, users.created_at FROM users WHERE (user_id = 2)`);
 
