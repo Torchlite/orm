@@ -85,7 +85,10 @@ client
 					});
 
 					vcols.rows.forEach(row => {
-						tSchema[row.name] = { type: row.type }
+						tSchema[row.name] = {
+							type: row.type,
+							readOnly: true
+						}
 					});
 				})
 				.then(() => (schema[t] = tSchema));
