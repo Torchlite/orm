@@ -42,7 +42,11 @@ let cloneSql2 = user._cloneSql();
 assert(cloneSql1 === expectedClone1Sql, `Clone SQL is wrong: ${cloneSql1}`);
 assert(cloneSql2 === expectedClone2Sql, `Clone SQL (no argument) is wrong: ${cloneSql2}`);
 
-assert.deepEqual(user.toJSON(), { name: 'Cameron', teamId: 10 })
-assert.deepEqual(user2.toJSON(), { userId: 2, name: 'Cameron', teamId: 10 })
+assert.deepEqual(user.toJSON(), { name: 'Cameron', teamId: 10 });
+assert.deepEqual(user2.toJSON(), { userId: 2, name: 'Cameron', teamId: 10 });
+
+user.__context = { admin: true };
+
+assert.deepEqual(user.toJSON(), { name: 'Cameron', teamId: 10, __context: { admin: true } });
 
 console.log('\tModel tests passed');
