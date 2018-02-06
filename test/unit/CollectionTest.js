@@ -56,6 +56,6 @@ let independentCamerons = new UserCollection()
 		}
 	});
 
-console.log(independentCamerons.toSql());
+assert(independentCamerons.toSql() === `SELECT users.user_id, users.team_id, users.name, users.created_at FROM users WHERE (name = 'Cameron' AND team_id is null)`);
 
 console.log('\tCollection tests passed');

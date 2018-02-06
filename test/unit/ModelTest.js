@@ -49,4 +49,6 @@ user.__context = { admin: true };
 
 assert.deepEqual(user.toJSON(), { name: 'Cameron', teamId: 10, __context: { admin: true } });
 
+assert(user2._deleteSql() === 'DELETE FROM users WHERE (users.user_id = 2)', 'Delete failed');
+
 console.log('\tModel tests passed');
