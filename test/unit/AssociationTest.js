@@ -52,24 +52,6 @@ t.owner = new User({ userId: 5 });
 
 assert(t.owner.userId === 5, 't.owner.userId was wrong');
 
-t.users
-	.add(new User({
-		name: 'Brantleigh'
-	}))
-	.then(() => t.users.collect());
-
-let testAdded;
-t.games.add(new Game({
-	date: '2018-01-01'
-}))
-	.then(added => {
-		testAdded = added;
-		return t.games.collect()
-	})
-	.then(games => assert(games.some(g => g.gameId === testAdded.gameId, 'game was not added')))
-	.then(() => console.log('\tbelongsToMany add succeeded'))
-	.catch(console.log);
-
 let rSql = t.games._removeSql(new Game({
 	gameId: 2
 }));

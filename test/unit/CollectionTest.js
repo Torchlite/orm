@@ -30,7 +30,7 @@ let games = new GameCollection()
 	.sort('gameId', 'desc');
 
 let simpleExpected = 'SELECT users.user_id, users.team_id, users.name, users.created_at FROM users';
-let simpleFilterExpected = `SELECT users.user_id, users.team_id, users.name, users.created_at FROM users WHERE (name = 'Cameron')`
+let simpleFilterExpected = `SELECT users.user_id, users.team_id, users.name, users.created_at FROM users WHERE (name = 'Cameron')`;
 
 assert(users.toSql() === simpleExpected, `Simple unfiltered was wrong:
 	right: ${simpleExpected}
@@ -47,4 +47,15 @@ assert(games.toSql() === `SELECT games.game_id, games.date FROM games WHERE (dat
 
 assert(users._countSql() === 'SELECT count(*) FROM users', users._countSql());
 assert(camerons._countSql() === `SELECT count(*) FROM users WHERE (name = 'Cameron')`, users._countSql());
+
+let independentCamerons = new UserCollection()
+	.filter({
+		name: 'Cameron',
+		teamId: {
+			$null: true
+		}
+	});
+
+console.log(independentCamerons.toSql());
+
 console.log('\tCollection tests passed');

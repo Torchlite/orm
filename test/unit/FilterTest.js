@@ -74,4 +74,19 @@ let bar = new Filter({
 });
 
 assert(bar.toSql() === `name = 'TeamCo' AND customer_count > 10 AND customer_count < 20`, bar.toSql());
+
+let isNull = new Filter({
+	employee_count: {
+		$null: true
+	}
+});
+
+let notNull = new Filter({
+	employee_count: {
+		$null: false
+	}
+});
+
+assert(isNull.toSql() === `employee_count is null`, isNull.toSql());
+assert(notNull.toSql() === `employee_count is not null`, notNull.toSql());
 console.log('\tFilter tests passed');
