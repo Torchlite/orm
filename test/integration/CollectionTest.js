@@ -1,7 +1,9 @@
+require('dotenv').config();
+
 let assert = require('assert');
 let { Pool } = require('pg');
 let pool = new Pool({
-	connectionString: 'postgres://localhost:5432/testerino'
+	connectionString: process.env.TEST_DB_URL
 });
 
 let {
