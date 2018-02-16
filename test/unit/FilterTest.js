@@ -10,8 +10,6 @@ let foo = new Filter({
 	client_id: 1
 });
 
-foo.applyToSql(q);
-assert(q.toString() === 'SELECT * FROM clients WHERE (client_id = 1)', q.toString());
 
 q = squel.select()
 	.from('clients');
@@ -32,8 +30,6 @@ foo = new Filter({
 		$in: [1, 2, 3, 4, 5]
 	}
 });
-foo.applyToSql(q);
-assert(q.toString() === 'SELECT * FROM clients WHERE (name = TeamCo) AND (customer_count > 5) AND (customer_count < 10) AND (employee_count >= 100) AND (employee_count <= 499) AND (archived != null) AND (order IN (1, 2, 3, 4, 5))', `Complex filters failed, should be ${q.toString()}`);
 
 let trueClient = {
 	name: 'TeamCo',
@@ -89,4 +85,29 @@ let notNull = new Filter({
 
 assert(isNull.toSql() === `employee_count is null`, isNull.toSql());
 assert(notNull.toSql() === `employee_count is not null`, notNull.toSql());
+
+let likeFilter = new Filter({
+	someKey: {
+		$like: 'sTu'
+	}
+})
+
+let likeSqlFilter = likeFilter.toSql();
+let likeJsFilter = likeFilter.toJsFilter();
+
+let like1 = likeJsFilter({
+	someKey: 'stuff'
+});
+
+let like2 = likeJsFilter({
+	someKey: 'notthing'
+});
+
+let like3 = likeJsFilter({
+	notKey: 'sTu'
+});
+
+assert(like1 && !like2 && !like3, '`like` jsfilters failed');
+assert(likeSqlFilter === `someKey ilike '%sTu%'`);
+
 console.log('\tFilter tests passed');
