@@ -12,7 +12,13 @@ class ORM {
 			connectionString: opts.dbUrl
 		});
 
-		this.pubsubInstance = new PGPubSub(opts.dbUrl);
+		if (opts.live === undefined) {
+			opts.live = true
+		}
+
+		if (opts.live) {
+			this.pubsubInstance = new PGPubSub(opts.dbUrl);
+		}
 	}
 
 	get BaseCollection() {

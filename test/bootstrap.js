@@ -9,7 +9,8 @@ let {
 	BaseModel,
 	Table
 } = new ORM({
-	dbUrl: process.env.TEST_DB_URL
+	dbUrl: process.env.TEST_DB_URL,
+	live: false
 });
 
 let userTable = new Table('users', {
