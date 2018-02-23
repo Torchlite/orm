@@ -109,4 +109,18 @@ module.exports = describe('Model', () => {
 			return expect(badFunc).to.throw();
 		});
 	});
+
+	describe('#toJSON', () => {
+		it('should serialize the model to JSON', () => {
+			let user = new User({
+				name: 'Cameron',
+				teamId: 10
+			});
+
+			user.toJSON().should.deep.equal({
+				name: 'Cameron',
+				teamId: 10
+			})
+		});
+	});
 });
