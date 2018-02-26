@@ -142,4 +142,23 @@ module.exports = describe('Filter', () => {
 		describe('#toSql', () => correctSql(f, `name ilike '%cam%'`))
 		describe('#toJsFilter', () => correctFunction(f, posTest, negTest));
 	});
+
+	describe('in', () => {
+		let f = new Filter({
+			some_num: {
+				$in: [1,2,3,4]
+			}
+		});
+
+		let posTest = {
+			some_num: 3
+		};
+
+		let negTest = {
+			some_num: 6
+		};
+
+		describe('#toSql', () => correctSql(f, `some_num IN (1, 2, 3, 4)`))
+		describe('#toJsFilter', () => correctFunction(f, posTest, negTest));
+	})
 });
