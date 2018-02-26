@@ -46,7 +46,7 @@ describe('Collection', () => {
 
 		it('should generate correct SQL', () => {
 			let simpleFilterExpected = `SELECT users.user_id, users.team_id, users.name, users.created_at FROM users WHERE (name = 'John')`;
-			return c.toSql().should.equal(simpleFilterExpected);
+			return c._collectSql.toString().should.equal(simpleFilterExpected);
 		})
 	});
 
@@ -145,7 +145,7 @@ describe('Collection', () => {
 		});
 	});
 
-	describe('#toSql', () => {
+	describe('#_collectSql', () => {
 		it('should generate correct sql', () => {
 			let games = new (BaseCollection.of(Game))()
 				.filter({
@@ -170,14 +170,14 @@ describe('Collection', () => {
 
 		let expected = `SELECT games.game_id, games.date FROM games WHERE (date > '2017-01-01' AND date < '2017-01-31' AND winner = 2 AND valid != FALSE AND game_id = 1) ORDER BY game_id DESC LIMIT 10 OFFSET 55`;
 
-		return games.toSql().should.be.equal(expected);
+		return games._collectSql.toString().should.be.equal(expected);
 	});
 
 	describe('#_countSql', () => {
 		it('should generate the correct sql', () => {
 			let users = new (BaseCollection.of(User))();
 
-			return users._countSql().should.be.equal('SELECT count(*) FROM users');
+			return users._countSql().toString().should.be.equal('SELECT count(*) FROM users');
 		})
 	});
 });

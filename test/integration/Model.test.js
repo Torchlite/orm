@@ -1,7 +1,5 @@
 require('dotenv').config();
 
-console.log('HERE');
-
 let { Pool } = require('pg');
 let pool = new Pool({
 	connectionString: process.env.TEST_DB_URL
