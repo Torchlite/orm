@@ -27,6 +27,7 @@
     "squel": "5.12.0"
   },
   "devDependencies": {
+    "bluebird": "3.5.1",
     "chai": "^4.1.2",
     "eslint": "^4.13.1",
     "istanbul": "^0.4.5",
