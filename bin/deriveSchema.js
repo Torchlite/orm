@@ -5,8 +5,10 @@ const { Client } = require('pg');
 const Promise = require('bluebird');
 const fs = require('fs');
 
+const useSSL = process.env.DATABASE_SSL === 'true';
+
 const client = new Client({
-	connectionString: process.env.DATABASE_URL
+	connectionString: process.env.DATABASE_URL + (useSSL ? '?ssl=true' : '')
 });
 
 const colsQuery = tableName => {
