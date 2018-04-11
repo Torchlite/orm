@@ -15,7 +15,7 @@ const colsQuery = tableName => {
 	return `
 		select
 			column_name,
-			data_type
+			coalesce(udt_name, data_type) as data_type
 		from
 			information_schema.columns
 		where
