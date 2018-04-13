@@ -65,6 +65,8 @@ describe('Model', () => {
 
 	describe('#fetch', () => {
 		let expected;
+		let theUser;
+
 		let fetchQuery = pool.query(`select user_id, name from users limit 1`)
 			.then(results => {
 				return {
@@ -74,7 +76,8 @@ describe('Model', () => {
 			})
 			.then(exp => {
 				expected = exp;
-				return User.fromId(exp.id).fetch();
+				theUser = User.fromId(exp.id);
+				return theUser.fetch();
 			});
 
 		it('should resolve without error', (done) => {
@@ -89,6 +92,18 @@ describe('Model', () => {
 					found.userId.should.be.equal(expected.id);
 					found.name.should.be.equal(expected.name);
 					found.greet().should.be.equal(`Hello, ${expected.name}`);
+
+					done();
+				})
+				.catch(done);
+		});
+
+		it('should fill out the fetched model', (done) => {
+			fetchQuery
+				.then(() => {
+					theUser.userId.should.be.equal(expected.id);
+					theUser.name.should.be.equal(expected.name);
+					theUser.greet().should.be.equal(`Hello, ${expected.name}`);
 
 					done();
 				})
