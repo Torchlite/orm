@@ -109,7 +109,9 @@ class Game extends BaseModel {
 	static get fieldMap() {
 		return {
 			gameId: 'game_id',
-			date: 'date'
+			date: 'date',
+			winner: 'winner',
+			valid: 'valid'
 		};
 	}
 }

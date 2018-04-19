@@ -45,7 +45,7 @@ describe('Collection', () => {
 		});
 
 		it('should generate correct SQL', () => {
-			let simpleFilterExpected = `SELECT users.user_id, users.team_id, users.name, users.created_at FROM users WHERE (name = 'John')`;
+			let simpleFilterExpected = `SELECT users.user_id, users.team_id, users.name, users.created_at FROM users WHERE (users.name = 'John')`;
 			return c._collectSql.toString().should.equal(simpleFilterExpected);
 		})
 	});
@@ -168,7 +168,7 @@ describe('Collection', () => {
 				.sort('gameId', 'desc');
 		});
 
-		let expected = `SELECT games.game_id, games.date FROM games WHERE (date > '2017-01-01' AND date < '2017-01-31' AND winner = 2 AND valid != FALSE AND game_id = 1) ORDER BY game_id DESC LIMIT 10 OFFSET 55`;
+		let expected = `SELECT games.game_id, games.date, games.winner, games.valid FROM games WHERE (games.date > '2017-01-01' AND games.date < '2017-01-31' AND games.winner = 2 AND games.valid != FALSE AND games.game_id = 1) ORDER BY games.game_id DESC LIMIT 10 OFFSET 55`;
 
 		return games._collectSql.toString().should.be.equal(expected);
 	});
