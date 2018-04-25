@@ -1,5 +1,5 @@
 {
-  "name": "wellspring",
+  "name": "wellspring-orm",
   "version": "0.1.0",
   "description": "Opinionated, thin ORM for Node",
   "main": "index.js",
