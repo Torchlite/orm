@@ -1,7 +1,7 @@
 {
-  "name": "orm",
+  "name": "wellspring",
   "version": "0.1.0",
-  "description": "",
+  "description": "Opinionated, thin ORM for Node",
   "main": "index.js",
   "scripts": {
     "test": "node_modules/nyc/bin/nyc.js node_modules/mocha/bin/mocha",
