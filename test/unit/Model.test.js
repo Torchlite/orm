@@ -59,7 +59,7 @@ module.exports = describe('Model', () => {
 
 	describe('#fetch', () => {
 		it('should generate correct SQL', () => {
-			let expectedFetch = `SELECT users.user_id, users.team_id, users.name, users.created_at FROM users WHERE (user_id = 2)`;
+			let expectedFetch = `SELECT users.user_id, users.team_id, users.name, users.created_at FROM users WHERE (users.user_id = 2)`;
 
 			let user = new User({
 				userId: 2
