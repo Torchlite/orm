@@ -4,15 +4,21 @@ let { Pool } = require('pg');
 let pool = new Pool({
 	connectionString: process.env.TEST_DB_URL
 });
-let { User, BaseCollection } = require('../bootstrap');
+let { User } = require('../bootstrap');
 
 let testUsers = [
-	new User ({ name: 'John' }),
-	new User ({ name: 'Bill' }),
-	new User ({ name: 'صلى الله عليه وسلم' }),
-	new User ({ name: 'John\'; DROP TABLE users' }),
-	new User ({ name: '💩' }),
-	new User ({ name: 'Who%s/\/Want\'s to know? $1' }),
+	new User({ name: 'John' }),
+	new User({ name: 'Bill', teamId: 2 }),
+	new User({ name: 'صلى الله عليه وسلم' }),
+	new User({ name: 'John\'; DROP TABLE users' }),
+	new User({ name: '💩' }),
+	new User({ name: 'Who%s/\/Want\'s to know? $1' }),
+	new User({ name: 'Pogo', metadata: {
+		logins: 15,
+		otherThing: {
+			foobar: 'stuff'
+		}
+	}})
 ];
 
 describe('Model', () => {
@@ -57,11 +63,13 @@ describe('Model', () => {
 						result.rows[0].user_id.should.be.equal(id);
 						result.rows[0].name.should.be.equal(u.name);
 
+						result.rows[0].metadata && result.rows[0].metadata.should.deep.equal(u.metadata);
+
 						done();
 					}).catch(done);
 			});
 		});
-	})
+	});
 
 	describe('#fetch', () => {
 		let expected;

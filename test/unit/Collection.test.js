@@ -45,7 +45,7 @@ describe('Collection', () => {
 		});
 
 		it('should generate correct SQL', () => {
-			let simpleFilterExpected = `SELECT users.user_id, users.team_id, users.name, users.created_at FROM users WHERE (users.name = 'John')`;
+			let simpleFilterExpected = `SELECT users.user_id, users.team_id, users.name, users.created_at, users.metadata FROM users WHERE (users.name = 'John')`;
 			return c._collectSql.toString().should.equal(simpleFilterExpected);
 		})
 	});

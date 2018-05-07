@@ -26,6 +26,9 @@ let userTable = new Table('users', {
 	},
 	created_at: {
 		type: 'timestamp with time zone'
+	},
+	metadata: {
+		type: 'jsonb'
 	}
 });
 
@@ -43,7 +46,8 @@ class User extends BaseModel {
 			userId: 'user_id',
 			teamId: 'team_id',
 			name: 'name',
-			createdAt: 'created_at'
+			createdAt: 'created_at',
+			metadata: 'metadata'
 		};
 	}
 }
@@ -121,6 +125,11 @@ class GameCollection extends BaseCollection {
 		return Game;
 	}
 }
+
+User.belongsTo(Team, {
+	key: 'teamId',
+	references: 'teamId'
+}, 'team')
 
 module.exports = {
 	User,
