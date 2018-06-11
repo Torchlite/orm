@@ -118,4 +118,23 @@ describe('Model', () => {
 				.catch(done);
 		});
 	});
+
+	describe('#clone', () => {
+		let fetchQuery = pool.query(`select user_id from users limit 1`)
+			.then(results => results.rows[0].user_id);
+
+		it('should create a copy of the row in the database', (done) => {
+			fetchQuery.then(async id => {
+				let user = await User.fromId(id).fetch();
+
+				user.clone()
+					.then(u => {
+						u.name.should.be.equal(user.name);
+						u.userId.should.not.be.equal(user.userId);
+					})
+					.then(() => done())
+					.catch(done);
+			});
+		});
+	});
 });

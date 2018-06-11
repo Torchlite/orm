@@ -71,7 +71,7 @@ module.exports = describe('Model', () => {
 
 	describe('#clone', () => {
 		it('should generate correct SQL', () => {
-			let expectedClone = `INSERT INTO users (user_id, name, team_id, created_at) VALUES (DEFAULT, 'Cameron', 10, DEFAULT) RETURNING users.user_id, users.name, users.team_id, users.created_at, users.metadata`;
+			let expectedClone = `INSERT INTO users (name, team_id) VALUES ('Cameron', 10) RETURNING users.user_id, users.name, users.team_id, users.created_at, users.metadata`;
 
 			let user = new User({
 				userId: 2,
