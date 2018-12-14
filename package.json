@@ -1,6 +1,6 @@
 {
   "name": "wellspring-orm",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Opinionated, thin ORM for Node",
   "main": "index.js",
   "scripts": {
@@ -19,19 +19,19 @@
     }
   },
   "dependencies": {
-    "command-line-args": "4.0.7",
-    "command-line-usage": "4.0.2",
-    "dotenv": "4.0.0",
-    "moment": "2.20.1",
-    "pg": "7.4.0",
-    "pg-pubsub": "0.3.0",
-    "protoduck": "5.0.0",
-    "squel": "5.12.0"
+    "command-line-args": "^4.0.7",
+    "command-line-usage": "^4.0.2",
+    "dotenv": "^4.0.0",
+    "moment": "^2.20.1",
+    "pg": "^7.4.0",
+    "pg-pubsub": "^0.3.0",
+    "protoduck": "^5.0.0",
+    "squel": "^5.12.0"
   },
   "devDependencies": {
-    "bluebird": "3.5.1",
+    "bluebird": "^3.5.1",
     "chai": "^4.1.2",
-    "eslint": "^4.13.1",
+    "eslint": "^5.10.0",
     "http-server": "^0.11.1",
     "istanbul": "^0.4.5",
     "jsdoc": "^3.5.5",
