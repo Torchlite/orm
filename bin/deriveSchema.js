@@ -22,14 +22,13 @@ const colsQuery = tableName => {
 			table_name = '${tableName}'`;
 };
 
-const virtualColsQuery = tableName => {
+const virtualColsQuery = (tableName, typeCase) => {
 	return `
 		SELECT
 			p.proname as "name",
 			pg_catalog.pg_get_function_result(p.oid) as "type",
 			CASE
-                WHEN p.prokind = 'a' THEN 'agg'
-                WHEN p.prokind = 'w' THEN 'window'
+                ${typeCase}
 				WHEN p.prorettype = 'pg_catalog.trigger'::pg_catalog.regtype THEN 'trigger'
 				ELSE 'normal'
 			END as "Type"
@@ -72,10 +71,25 @@ client
 	.connect()
 	.then(() => client.query(tablesQuery))
 	.then(r => r.rows.map(x => x.table_name))
-	.then(tables => {
+	.then(tables =>
+		client
+			.query('SHOW server_version')
+			.then(r => [Number(r.rows[0].server_version.slice(0, 2)), tables])
+	)
+	.then(([version, tables]) => {
+		const typeCase =
+			version >= 11
+				? `
+            WHEN p.prokind = 'a' THEN 'agg'
+            WHEN p.prokind = 'w' THEN 'window'
+        `
+				: `
+            WHEN p.proisagg THEN 'agg'
+            WHEN p.proiswindow THEN 'window'
+        `;
 		return Promise.map(tables, t => {
 			let tSchema = {};
-			return Promise.all([client.query(colsQuery(t)), client.query(virtualColsQuery(t))])
+			return Promise.all([client.query(colsQuery(t)), client.query(virtualColsQuery(t, typeCase))])
 				.then(([cols, vcols]) => {
 					cols.rows.forEach(row => {
 						tSchema[row.column_name] = { type: row.data_type };
