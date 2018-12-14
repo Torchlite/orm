@@ -15,3 +15,7 @@ Once the docs are built, you can launch a server to show them with
 which starts a server on port 8080.
 
 You can do both with `npm run build-docs && npm run docs`.
+
+## Note
+Versions >= 0.2.0 require PostgreSQL >= 11.0. If you're running on an older
+version of PostgreSQL, install version 0.1.0.

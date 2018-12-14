@@ -28,8 +28,8 @@ const virtualColsQuery = tableName => {
 			p.proname as "name",
 			pg_catalog.pg_get_function_result(p.oid) as "type",
 			CASE
-				WHEN p.proisagg THEN 'agg'
-				WHEN p.proiswindow THEN 'window'
+                WHEN p.prokind = 'a' THEN 'agg'
+                WHEN p.prokind = 'w' THEN 'window'
 				WHEN p.prorettype = 'pg_catalog.trigger'::pg_catalog.regtype THEN 'trigger'
 				ELSE 'normal'
 			END as "Type"
@@ -41,7 +41,7 @@ const virtualColsQuery = tableName => {
 			AND n.nspname <> 'information_schema'
 			AND pg_catalog.pg_get_function_arguments(p.oid) like '%${tableName}';
 	`;
-}
+};
 
 const tablesQuery = `
 	select
@@ -75,12 +75,7 @@ client
 	.then(tables => {
 		return Promise.map(tables, t => {
 			let tSchema = {};
-			return Promise.all([
-				client
-					.query(colsQuery(t)),
-				client
-					.query(virtualColsQuery(t))
-			])
+			return Promise.all([client.query(colsQuery(t)), client.query(virtualColsQuery(t))])
 				.then(([cols, vcols]) => {
 					cols.rows.forEach(row => {
 						tSchema[row.column_name] = { type: row.data_type };
@@ -90,7 +85,7 @@ client
 						tSchema[row.name] = {
 							type: row.type,
 							readOnly: true
-						}
+						};
 					});
 				})
 				.then(() => (schema[t] = tSchema));
@@ -109,14 +104,18 @@ client
 	})
 	.then(() => {
 		const ordered = {};
-		Object.keys(schema).sort().forEach(k => {
-			const innerOrdered = {};
-			Object.keys(schema[k]).sort().forEach(k2 => {
-				innerOrdered[k2] = schema[k][k2];
-			});
+		Object.keys(schema)
+			.sort()
+			.forEach(k => {
+				const innerOrdered = {};
+				Object.keys(schema[k])
+					.sort()
+					.forEach(k2 => {
+						innerOrdered[k2] = schema[k][k2];
+					});
 
-			ordered[k] = innerOrdered;
-		});
+				ordered[k] = innerOrdered;
+			});
 
 		const data = JSON.stringify(ordered, null, '\t');
 
