@@ -28,7 +28,7 @@ const virtualColsQuery = (tableName, typeCase) => {
 			p.proname as "name",
 			pg_catalog.pg_get_function_result(p.oid) as "type",
 			CASE
-                ${typeCase}
+				${typeCase}
 				WHEN p.prorettype = 'pg_catalog.trigger'::pg_catalog.regtype THEN 'trigger'
 				ELSE 'normal'
 			END as "Type"
@@ -80,13 +80,13 @@ client
 		const typeCase =
 			version >= 11
 				? `
-            WHEN p.prokind = 'a' THEN 'agg'
-            WHEN p.prokind = 'w' THEN 'window'
-        `
+			WHEN p.prokind = 'a' THEN 'agg'
+			WHEN p.prokind = 'w' THEN 'window'
+		`
 				: `
-            WHEN p.proisagg THEN 'agg'
-            WHEN p.proiswindow THEN 'window'
-        `;
+			WHEN p.proisagg THEN 'agg'
+			WHEN p.proiswindow THEN 'window'
+		`;
 		return Promise.map(tables, t => {
 			let tSchema = {};
 			return Promise.all([client.query(colsQuery(t)), client.query(virtualColsQuery(t, typeCase))])
