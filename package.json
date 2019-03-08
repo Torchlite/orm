@@ -1,6 +1,6 @@
 {
   "name": "wellspring-orm",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "description": "Opinionated, thin ORM for Node",
   "main": "index.js",
   "scripts": {
