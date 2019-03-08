@@ -38,7 +38,7 @@ const virtualColsQuery = (tableName, typeCase) => {
 		WHERE pg_catalog.pg_function_is_visible(p.oid)
 			AND n.nspname <> 'pg_catalog'
 			AND n.nspname <> 'information_schema'
-			AND pg_catalog.pg_get_function_arguments(p.oid) like '%${tableName}';
+			AND pg_catalog.pg_get_function_arguments(p.oid) like '_ ${tableName}';
 	`;
 };
 
